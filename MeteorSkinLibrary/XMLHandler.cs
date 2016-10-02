@@ -313,19 +313,7 @@ namespace MeteorSkinLibrary
             xml.Save(LibraryPath);
         }
 
-        internal String get_property(string property_name)
-        {
-            XmlDocument xml = new XmlDocument();
-            xml.Load(LibraryPath);
-            XmlNode character = xml.SelectSingleNode("/config/property[attribute::name='" + property_name + "']");
-
-            return character.InnerText;
-        }
-
-        internal void set_property(string property_name,string property_value)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 
 

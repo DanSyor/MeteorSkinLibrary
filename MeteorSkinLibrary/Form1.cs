@@ -19,7 +19,7 @@ namespace MeteorSkinLibrary
         #region Handlers
         XMLHandler handler = new XMLHandler();
         fileHandler filehandler = new fileHandler();
-        XMLHandler properties = new XMLHandler("config/config.xml");
+        ConfigHandler properties = new ConfigHandler("config/Default_Config.xml");
         #endregion
         #region SelectedInfo
         //Name in the list
@@ -68,17 +68,23 @@ namespace MeteorSkinLibrary
             else
             {
                 //Checks Library.xml presence, if not creates one based on Default_Library.xml
-                if (!File.Exists("config/Library.xml"))
+                if (!File.Exists(properties.get("default_library")))
                 {
                     console_write("Creating Library...");
-                    File.Copy("config/Default_Library.xml", "config/Library.xml");
+                    File.Copy(properties.get("default_library"), "config/Library.xml");
+                    properties.add("current_library", "config/Library.xml");
                     console_write("Done.");
+                }else
+                {
+                    properties.set_library_path(properties.get("current_config"));
                 }
                 //Checks Config.xml presence, if not creates one based on Default_Config.xml
-                if (!File.Exists("config/Config.xml"))
+                if (!File.Exists(properties.get("default_config")))
                 {
                     console_write("Creating Config...");
-                    File.Copy("config/Default_Config.xml", "config/Config.xml");
+                    File.Copy(properties.get("default_config"), "config/Config.xml");
+                    properties.add("current_config", "config/Config.xml");
+                    properties.set_library_path(properties.get("current_config"));
                     console_write("Done.");
                 }
 
@@ -815,12 +821,12 @@ namespace MeteorSkinLibrary
         //Gets a property
         private void get_property(String property_name)
         {
-            properties.get_property(property_name);
+            properties.get(property_name);
         }
         //Gets a property
         private void set_property(String property_name,String property_value)
         {
-            properties.set_property(property_name, property_value);
+            properties.set(property_name, property_value);
         }
         #endregion
 
