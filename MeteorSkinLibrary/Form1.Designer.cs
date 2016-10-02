@@ -70,6 +70,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
             this.slotbox = new System.Windows.Forms.TextBox();
+            this.resetConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -137,7 +138,8 @@
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.configurationToolStripMenuItem,
             this.resetLibraryToolStripMenuItem,
-            this.resetWorkspaceToolStripMenuItem});
+            this.resetWorkspaceToolStripMenuItem,
+            this.resetConfigToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -161,7 +163,7 @@
             this.resetWorkspaceToolStripMenuItem.Name = "resetWorkspaceToolStripMenuItem";
             this.resetWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.resetWorkspaceToolStripMenuItem.Text = "Reset Workspace";
-            this.resetWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.resetWorkspaceToolStripMenuItem_Click);
+            this.resetWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.reset_workspace);
             // 
             // CharacterList
             // 
@@ -272,9 +274,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 72);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.Size = new System.Drawing.Size(69, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Name";
+            this.label2.Text = "Library Name";
             // 
             // SlotNumberText
             // 
@@ -481,6 +483,13 @@
             this.slotbox.DragDrop += new System.Windows.Forms.DragEventHandler(this.slot_DragDrop);
             this.slotbox.DragEnter += new System.Windows.Forms.DragEventHandler(this.slot_DragEnter);
             // 
+            // resetConfigToolStripMenuItem
+            // 
+            this.resetConfigToolStripMenuItem.Name = "resetConfigToolStripMenuItem";
+            this.resetConfigToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.resetConfigToolStripMenuItem.Text = "Reset Config";
+            this.resetConfigToolStripMenuItem.Click += new System.EventHandler(this.reset_config);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -561,6 +570,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox slotbox;
+        private System.Windows.Forms.ToolStripMenuItem resetConfigToolStripMenuItem;
     }
 }
 

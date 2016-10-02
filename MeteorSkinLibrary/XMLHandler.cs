@@ -14,6 +14,16 @@ namespace MeteorSkinLibrary
         //Library path
         String LibraryPath = "config/Library.xml";
 
+        public XMLHandler(String custom_Library_path)
+        {
+            this.LibraryPath = custom_Library_path;
+        }
+
+        public XMLHandler()
+        {
+
+        }
+
         //Returns an ArrayList containing character names
         public ArrayList get_character_list()
         {
@@ -301,6 +311,20 @@ namespace MeteorSkinLibrary
             }
 
             xml.Save(LibraryPath);
+        }
+
+        internal String get_property(string property_name)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.Load(LibraryPath);
+            XmlNode character = xml.SelectSingleNode("/config/property[attribute::name='" + property_name + "']");
+
+            return character.InnerText;
+        }
+
+        internal void set_property(string property_name,string property_value)
+        {
+            throw new NotImplementedException();
         }
     }
 

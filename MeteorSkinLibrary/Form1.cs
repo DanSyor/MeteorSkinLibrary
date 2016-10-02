@@ -15,92 +15,111 @@ namespace MeteorSkinLibrary
 {
     public partial class Form1 : Form
     {
-        //Handlers
+        //Variables
+        #region Handlers
         XMLHandler handler = new XMLHandler();
         fileHandler filehandler = new fileHandler();
-
-        //Current Variables
-
-        //Selected Character
+        XMLHandler properties = new XMLHandler("config/config.xml");
+        #endregion
+        #region SelectedInfo
         //Name in the list
         String selected_char_name;
-        //ID of selected character
-        int selected_skin_slot;
-        //workspace folder path
+        //workspace folder name
         String selected_char_folder;
-        //Character is DLC
-        String dlc = "";
         //Two digit representation of skin slot
         String selected_skin_slot_model;
         String selected_skin_slot_csp;
-
-        //Lists for soft
-        ArrayList Characters = new ArrayList();
-        ArrayList Skins = new ArrayList();
-        //Selected Files
-        String[] model_folder_list;
-        String[] csp_file_list;
-        String[] slot_file_list;
-
-        //destination
-        String csp_destination;
-        String model_destination;
-
+        //ID of selected skin slot
+        int selected_skin_slot;
         //Selected CSP
         string selected_skin_csp_name;
         //Selected Model
         private string selected_skin_model_name;
+        //Character is DLC
+        String dlc = "";
+        #endregion
+        #region Lists
+        //Lists for soft
+        ArrayList Characters = new ArrayList();
+        ArrayList Skins = new ArrayList();
+        #endregion
+        #region Files
+        //Selected Files
+        String[] model_folder_list;
+        String[] csp_file_list;
+        String[] slot_file_list;
+        //destination
+        String csp_destination;
+        String model_destination;
+        #endregion
 
         public Form1()
         {
             InitializeComponent();
+            //Checks Default_Library.xml presence
             if (!File.Exists("config/Default_Library.xml"))
             {
                 console_write("Default Library not found, please add Default_Library.xml in the /config folder.");
             }
+            if (!File.Exists("config/Default_Config.xml"))
+            {
+                console_write("Default Config not found, please add Default_Config.xml in the /config folder.");
+            }
             else
             {
+                //Checks Library.xml presence, if not creates one based on Default_Library.xml
                 if (!File.Exists("config/Library.xml"))
                 {
                     console_write("Creating Library...");
                     File.Copy("config/Default_Library.xml", "config/Library.xml");
                     console_write("Done.");
-                    Characters = handler.get_character_list();
-                    init_character_ListBox();
-
                 }
-                else
+                //Checks Config.xml presence, if not creates one based on Default_Config.xml
+                if (!File.Exists("config/Config.xml"))
                 {
-                    Characters = handler.get_character_list();
-                    init_character_ListBox();
+                    console_write("Creating Config...");
+                    File.Copy("config/Default_Config.xml", "config/Config.xml");
+                    console_write("Done.");
                 }
+
+                //Loads Character List
+                Characters = handler.get_character_list();
+                init_character_ListBox();
+                state_check();
             }
 
         }
 
-        //Menu Functions
-        //Menu Config Function
-        private void menu_config(object sender, EventArgs e)
-        {
-
-        }
-
+        //Functions
+        #region Menu
+        #region FileMenu
         //Menu Exit Function
         private void menu_software_exit(object sender, EventArgs e)
         {
             Application.Exit();
         }
-
-        //Filling Character list
-        public void init_character_ListBox()
+        //Open Workspace Function
+        private void openWorkspace(object sender, EventArgs e)
         {
-            foreach (String chars in Characters)
-            {
-                CharacterList.Items.Add(chars);
-            }
-
+            System.Diagnostics.Process.Start("workspace");
         }
-
+        #endregion
+        #region SkinMenu
+        //When Add Skin is pressed
+        private void skin_add(object sender, EventArgs e)
+        {
+            handler.add_skin(this.selected_char_name, SkinListBox.Items.Count + 1);
+            console_write("Skin added for " + this.selected_char_name + " in slot " + (SkinListBox.Items.Count + 1));
+            skin_ListBox_reload();
+            state_check();
+        }
+        #endregion
+        #region OptionMenu
+        //Menu Config Function
+        private void menu_config(object sender, EventArgs e)
+        {
+            state_check();
+        }
         //Menu Reset Library
         private void menu_reset_library(object sender, EventArgs e)
         {
@@ -108,16 +127,59 @@ namespace MeteorSkinLibrary
             {
                 File.Delete("config/Library.xml");
                 File.Copy("config/Default_Library.xml", "config/Library.xml");
-                skin_ListBox_reload();
+
+                state_check();
                 console_write("Library reset complete");
             }
-                
-        }
 
-        //Character Actions
+        }
+        //Workspace reset button
+        private void reset_workspace(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Doing this will erase all contents of the workspace folder which contains every file you've added. Continue with this destruction?", "Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                if (Directory.Exists("workspace"))
+                {
+                    String[] files = Directory.GetFiles("workspace", "*", SearchOption.AllDirectories);
+                    foreach (String file in files)
+                    {
+                        File.Delete(file);
+                    }
+                    Directory.Delete("workspace", true);
+                    Directory.CreateDirectory("workspace");
+                }
+                else
+                {
+                    Directory.CreateDirectory("workspace");
+                }
+                if (!Directory.Exists("workspace"))
+                {
+                    Directory.CreateDirectory("workspace");
+                }
+                console_write("Workspace reset complete");
+            }
+            state_check();
+        }
+        //Config Reset button
+        private void reset_config(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Doing this will erase all configuration changes. Continue with this destruction?", "Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                File.Delete("config/Config.xml");
+                File.Copy("config/Default_Config.xml", "config/Config.xml");
+
+                state_check();
+                console_write("Config reset complete");
+            }
+        }
+        #endregion
+        #endregion
+
+        #region CharacterAction
         //When a character is selected
         private void character_selected(object sender, EventArgs e)
         {
+            state_check();
             this.selected_char_name = CharacterList.SelectedItem.ToString();
             this.selected_char_folder = handler.get_folder_name(this.selected_char_name);
             this.model_destination = "workspace/data/fighter/" + this.selected_char_folder + "/";
@@ -130,38 +192,164 @@ namespace MeteorSkinLibrary
             {
                 this.csp_destination = "workspace/data/ui/replace/chr/";
             }
-
+            state_check();
             skin_ListBox_reload();
         }
 
-        //Reloads Skin List
-        private void skin_ListBox_reload()
-        {
-            SkinListBox.Items.Clear();
-            Skins = handler.get_skin_list(selected_char_name);
-            foreach (String skin in Skins)
-            {
-                SkinListBox.Items.Add(skin);
-            }
-        }
-
-        //Skin Details Actions
+        #endregion
+        #region SkinAction
         //When a skin is selected
         private void skin_selected(object sender, EventArgs e)
         {
             skin_details_reload();
+            state_check();
         }
 
-
-        //Save button is pressed
+        //Skin Info Saved button is pressed
         private void save_skin_info(object sender, EventArgs e)
         {
             Skin current = new MeteorSkinLibrary.Skin(int.Parse(SlotNumberText.Text), SkinOriginText.Text, SkinNameText.Text, false);
             handler.set_skin(this.selected_char_name, this.selected_skin_slot + 1, current);
             skin_ListBox_reload();
+            state_check();
         }
 
+        //When Delete is pressed
+        private void skin_delete(object sender, EventArgs e)
+        {
+            int index = SkinListBox.SelectedIndex + 1;
+            int max = SkinListBox.Items.Count;
+            Skin current = handler.get_skin(this.selected_char_name, index);
 
+            if (index < max)
+            {
+                handler.clean_skin(this.selected_char_name, index);
+                skin_ListBox_reload();
+                console_write("Deleted slot " + index);
+            }
+            else
+            {
+                handler.delete_skin(this.selected_char_name, index);
+                skin_ListBox_reload();
+                console_write("Deleted slot " + index);
+            }
+            String modelpath = "workspace/data/fighter/" + this.selected_char_folder + "/body/c" + this.selected_skin_slot_model;
+            if (Directory.Exists(modelpath)) { Directory.Delete(modelpath, true); }
+
+            String csppath = "workspace/data/ui/replace/" + dlc + "chr/ ";
+
+            String[] files = Directory.GetFiles(csppath, "*" + this.selected_char_folder + "_" + this.selected_skin_slot_csp + ".nut", SearchOption.AllDirectories);
+            foreach (String file in files)
+            {
+                Console.WriteLine(file);
+                File.Delete(file);
+            }
+
+            state_check();
+
+
+
+        }
+
+        //When Clean Files is pressed
+        private void clean_files_clicked(object sender, EventArgs e)
+        {
+            int index = SkinListBox.SelectedIndex + 1;
+            int max = SkinListBox.Items.Count;
+            Skin current = handler.get_skin(this.selected_char_name, index);
+
+            String modelpath = this.model_destination + "/body/c" + this.selected_skin_slot_model;
+            if (Directory.Exists(modelpath)) { Directory.Delete(modelpath, true); }
+
+
+            handler.delete_skin_all_csp(this.selected_char_name, this.selected_skin_slot_csp);
+            handler.delete_skin_all_model(this.selected_char_name, this.selected_skin_slot_csp);
+
+            String[] files = Directory.GetFiles(this.csp_destination, "*" + this.selected_char_folder + "_" + this.selected_skin_slot_csp + ".nut", SearchOption.AllDirectories);
+            foreach (String file in files)
+            {
+                File.Delete(file);
+
+            }
+            if (Directory.Exists(this.model_destination))
+            {
+                String[] modelfiles = Directory.GetFiles(this.model_destination, "*", SearchOption.AllDirectories);
+                foreach (String file in modelfiles)
+                {
+                    Console.WriteLine(file);
+                    File.Delete(file);
+
+                }
+            }
+
+            state_check();
+            skin_details_reload();
+
+        }
+        #endregion
+        #region ModelAction
+        //On model selected
+        private void model_selected(object sender, EventArgs e)
+        {
+            if (models_ListView.SelectedItems.Count == 1)
+            {
+                this.selected_skin_model_name = models_ListView.SelectedItems[0].Text;
+                label5.Text = "Selected Model : " + models_ListView.SelectedItems[0].Text;
+                button6.Enabled = true;
+            }
+            state_check();
+        }
+        //On model delete
+        private void remove_selected_model_Click(object sender, EventArgs e)
+        {
+            if (this.selected_skin_model_name == "cxx")
+            {
+                foreach (String file in Directory.GetFiles(this.model_destination + "/body/c" + this.selected_skin_slot_model))
+                {
+                    File.Delete(file);
+                }
+                Directory.Delete(this.model_destination + "/body/c" + this.selected_skin_slot_model);
+            }
+            else
+            {
+                foreach (String file in Directory.GetFiles(this.model_destination + "/body/l" + this.selected_skin_slot_model))
+                {
+                    File.Delete(file);
+                }
+                Directory.Delete(this.model_destination + "/body/l" + this.selected_skin_slot_model);
+            }
+
+            handler.delete_skin_model(selected_char_name, int.Parse(this.selected_skin_slot_model) + 1, this.selected_skin_model_name);
+            skin_details_reload();
+            skin_ListBox_reload();
+            state_check();
+        }
+        #endregion
+        #region CspAction
+        //When a csp is selected
+        private void csp_selected(object sender, EventArgs e)
+        {
+            if (csps_ListView.SelectedItems.Count == 1)
+            {
+                this.selected_skin_csp_name = csps_ListView.SelectedItems[0].Text;
+                selected_csp_name.Text = "Selected CSP : " + csps_ListView.SelectedItems[0].Text;
+                remove_selected_csp.Enabled = true;
+            }
+            state_check();
+        }
+        //When a csp is deleted
+        private void remove_selected_csp_Click(object sender, EventArgs e)
+        {
+            String file_path = "workspace/data/ui/replace/" + dlc + "chr/" + this.selected_skin_csp_name + "/" + this.selected_skin_csp_name + "_" + this.selected_char_folder + "_" + this.selected_skin_slot_csp + ".nut";
+            File.Delete(file_path);
+            handler.delete_skin_csp(selected_char_name, int.Parse(selected_skin_slot_csp), this.selected_skin_csp_name);
+            skin_details_reload();
+            state_check();
+        }
+        #endregion
+
+        #region Interface
+        #region Reloads
         //Reloads Skin Details 
         private void skin_details_reload()
         {
@@ -206,55 +394,19 @@ namespace MeteorSkinLibrary
 
 
         }
-
-        //Skin Menu Actions     
-        //When Add Skin is pressed
-        private void skin_add(object sender, EventArgs e)
+        //Reloads Skin List
+        private void skin_ListBox_reload()
         {
-            handler.add_skin(this.selected_char_name, SkinListBox.Items.Count + 1);
-            console_write("Skin added for "+this.selected_char_name+" in slot "+ (SkinListBox.Items.Count + 1));
-            skin_ListBox_reload();
+            SkinListBox.Items.Clear();
+            Skins = handler.get_skin_list(selected_char_name);
+            foreach (String skin in Skins)
+            {
+                SkinListBox.Items.Add(skin);
+            }
         }
 
-        //Skin File Actions
-        //When Delete is pressed
-        private void skin_delete(object sender, EventArgs e)
-        {
-            int index = SkinListBox.SelectedIndex + 1;
-            int max = SkinListBox.Items.Count;
-            Skin current = handler.get_skin(this.selected_char_name, index);
-
-            if (index < max)
-            {
-                handler.clean_skin(this.selected_char_name, index);
-                skin_ListBox_reload();
-                console_write("Deleted slot "+index);
-            }
-            else
-            {
-                handler.delete_skin(this.selected_char_name, index);
-                skin_ListBox_reload();
-                console_write("Deleted slot " + index);
-            }
-            String modelpath = "workspace/data/fighter/" + this.selected_char_folder + "/body/c" + this.selected_skin_slot_model;
-            if (Directory.Exists(modelpath)) { Directory.Delete(modelpath, true); }
-
-            String csppath = "workspace/data/ui/replace/" + dlc + "chr/ ";
-
-            String[] files = Directory.GetFiles(csppath, "*" + this.selected_char_folder + "_" + this.selected_skin_slot_csp + ".nut", SearchOption.AllDirectories);
-            foreach (String file in files)
-            {
-                Console.WriteLine(file);
-                File.Delete(file);
-            }
-
-
-
-
-
-        }
-
-        //Drag & Drop Handlers
+        #endregion
+        #region Drag&Drop
         private void model_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -266,6 +418,7 @@ namespace MeteorSkinLibrary
         {
             this.model_folder_list = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             batch_move_model();
+            state_check();
         }
         private void csp_DragEnter2(object sender, DragEventArgs e)
         {
@@ -281,6 +434,7 @@ namespace MeteorSkinLibrary
             {
                 this.csp_file_list = FileList;
                 batch_copy_csp();
+                state_check();
             }
             else
             {
@@ -300,19 +454,32 @@ namespace MeteorSkinLibrary
         {
             this.slot_file_list = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             batch_add_slot();
+            state_check();
         }
+        #endregion
+        #region Inits
+        //Filling Character list
+        public void init_character_ListBox()
+        {
+            foreach (String chars in Characters)
+            {
+                CharacterList.Items.Add(chars);
+            }
 
-        //When Model is added
+        }
+        #endregion
+        #region Batch
+        //batch copy with drag&dropped folder and current slot
         private void batch_move_model()
         {
 
             String slot = this.selected_skin_slot_model;
-            foreach(String folder in this.model_folder_list)
+            foreach (String folder in this.model_folder_list)
             {
                 Console.WriteLine("Folder is : " + folder);
                 String type = "";
                 String currentfolder = Path.GetFileName(folder);
-                Regex cxx = new Regex("^[c](xx|[0-9]{1,3}$)",RegexOptions.IgnoreCase);
+                Regex cxx = new Regex("^[c](xx|[0-9]{1,3}$)", RegexOptions.IgnoreCase);
                 Regex lxx = new Regex("^[l](xx|[0-9]{1,3}$)", RegexOptions.IgnoreCase);
                 if (cxx.IsMatch(currentfolder))
                 {
@@ -327,7 +494,7 @@ namespace MeteorSkinLibrary
                 {
                     type = "body";
                 }
-                
+
                 switch (type)
                 {
                     case "body":
@@ -345,10 +512,11 @@ namespace MeteorSkinLibrary
             }
 
         }
-        private void batch_move_model(String[] filelist,int i_slot)
+        //batch copy with specified source and destination slot
+        private void batch_move_model(String[] filelist, int i_slot)
         {
 
-            String slot = (i_slot-1) < 10 ? "0" + (i_slot - 1).ToString() : (i_slot - 1).ToString();
+            String slot = (i_slot - 1) < 10 ? "0" + (i_slot - 1).ToString() : (i_slot - 1).ToString();
             foreach (String folder in filelist)
             {
                 Console.WriteLine("Folder is : " + folder);
@@ -387,13 +555,13 @@ namespace MeteorSkinLibrary
             }
 
         }
-        //When CSP is added
+        //batch copy with drag&dropped folder and current slot
         private void batch_copy_csp()
         {
             String path = csp_file_list[0];
             String filter = "*" + this.selected_char_folder + "_" + "*.nut";
 
-            String[] files = Directory.GetFiles(path,filter, SearchOption.AllDirectories);
+            String[] files = Directory.GetFiles(path, filter, SearchOption.AllDirectories);
 
             foreach (String file in files)
             {
@@ -402,14 +570,15 @@ namespace MeteorSkinLibrary
                 String number = Path.GetFileName(file).Split('_')[1];
                 copyCSP(file, type + number, this.selected_skin_slot_csp);
             }
-            console_write("All detected CSP were moved to slot "+this.selected_skin_slot_csp);
+            console_write("All detected CSP were moved to slot " + this.selected_skin_slot_csp);
             skin_details_reload();
         }
-        private void batch_copy_csp(String[] filelist,int i_slot)
+        //batch copy with specified source and destination slot
+        private void batch_copy_csp(String[] filelist, int i_slot)
         {
-            if(filelist.Length != 0)
+            if (filelist.Length != 0)
             {
-                String slot = (i_slot ) < 10 ? "0" + (i_slot ).ToString() : (i_slot ).ToString();
+                String slot = (i_slot) < 10 ? "0" + (i_slot).ToString() : (i_slot).ToString();
                 String path = filelist[0];
 
                 String filter = "*.nut";
@@ -429,21 +598,21 @@ namespace MeteorSkinLibrary
             {
                 console_write("no csp detected " + i_slot);
             }
-            
+
             skin_details_reload();
         }
-        //When Slot is added
+        //batch copy with specified source and new next slot
         private void batch_add_slot()
         {
             Regex slotname = new Regex("(slot_)([0-9]{1,3})(_)(p*)");
-            foreach(String file in this.slot_file_list)
+            foreach (String file in this.slot_file_list)
             {
                 if (slotname.IsMatch(Path.GetFileName(file)))
                 {
                     skin_ListBox_reload();
-                    console_write("Slot Detected : "+ Path.GetFileName(file));
+                    console_write("Slot Detected : " + Path.GetFileName(file));
                     String skin_name = Path.GetFileName(file).Split('_')[2];
-                    if(skin_name == "")
+                    if (skin_name == "")
                     {
                         skin_name = "empty";
                     }
@@ -466,7 +635,7 @@ namespace MeteorSkinLibrary
                     if (Directory.Exists(file + "/csp/"))
                     {
                         console_write("Slot csp folder detected");
-                        String[] folder = new string[] {file + "/csp/" };
+                        String[] folder = new string[] { file + "/csp/" };
                         batch_copy_csp(folder, skin_slot);
                     }
                     else
@@ -479,7 +648,6 @@ namespace MeteorSkinLibrary
             SkinListBox.SelectedIndex = (SkinListBox.Items.Count - 1);
             skin_details_reload();
         }
-
         //Used to move a cXX folder to the correct location
         private void copyModel(String path, String slot, String type)
         {
@@ -494,7 +662,7 @@ namespace MeteorSkinLibrary
             switch (type)
             {
                 case "cxx":
-                    modelpath += "body/c"+slot;
+                    modelpath += "body/c" + slot;
                     if (!Directory.Exists(this.model_destination + "/body")) { Directory.CreateDirectory(this.model_destination + "/body"); }
                     break;
                 case "lxx":
@@ -506,7 +674,7 @@ namespace MeteorSkinLibrary
                     if (!Directory.Exists(this.model_destination + "/body")) { Directory.CreateDirectory(this.model_destination + "/body"); }
                     break;
             }
-            
+
             if (Directory.Exists(modelpath))
             {
                 String[] previousfiles = Directory.GetFiles(modelpath);
@@ -516,12 +684,12 @@ namespace MeteorSkinLibrary
                 }
 
                 String[] files = Directory.GetFiles(path);
-                foreach(String file in files)
+                foreach (String file in files)
                 {
                     String filepath = modelpath + "/" + Path.GetFileName(file);
-                    File.Copy(file, filepath,true);
+                    File.Copy(file, filepath, true);
                 }
-                handler.add_skin_model(this.selected_char_name, int.Parse(slot)+1, type);
+                handler.add_skin_model(this.selected_char_name, int.Parse(slot) + 1, type);
             }
             else
             {
@@ -532,12 +700,11 @@ namespace MeteorSkinLibrary
                     String filepath = modelpath + "/" + Path.GetFileName(file);
                     File.Copy(file, filepath, true);
                 }
-                handler.add_skin_model(this.selected_char_name, int.Parse(slot)+1, type);
+                handler.add_skin_model(this.selected_char_name, int.Parse(slot) + 1, type);
             }
 
             console_write("Moved to \"" + modelpath + "\"");
         }
-
         //Used to move a CSP file to the correct location
         private void copyCSP(String FilePath, String Filetype, String slot)
         {
@@ -546,8 +713,8 @@ namespace MeteorSkinLibrary
 
             String character_folder = this.selected_char_folder;
             String final_file_name = Filetype + "_" + character_folder + "_" + slot + ".nut";
-            Console.WriteLine("Copied : "+final_file_name);
-            if (!Directory.Exists(this.csp_destination+"/" + Filetype + "/"))
+            Console.WriteLine("Copied : " + final_file_name);
+            if (!Directory.Exists(this.csp_destination + "/" + Filetype + "/"))
             {
                 Directory.CreateDirectory(this.csp_destination + Filetype + "/");
             }
@@ -556,140 +723,110 @@ namespace MeteorSkinLibrary
             handler.add_skin_csp(this.selected_char_name, int.Parse(slot), Filetype);
 
         }
-
         //Used to move a slot to the correct location
         private void copySlot()
         {
 
         }
-
-        //When a csp is deleted
-        private void remove_selected_csp_Click(object sender, EventArgs e)
-        {
-            String file_path = "workspace/data/ui/replace/" + dlc + "chr/" + this.selected_skin_csp_name + "/" + this.selected_skin_csp_name + "_" + this.selected_char_folder + "_" + this.selected_skin_slot_csp + ".nut";
-            File.Delete(file_path);
-            handler.delete_skin_csp(selected_char_name, int.Parse(selected_skin_slot_csp), this.selected_skin_csp_name);
-            skin_details_reload();
-        }
-
-        //When a csp is selected
-        private void csp_selected(object sender, EventArgs e)
-        {
-            if (csps_ListView.SelectedItems.Count == 1)
-            {
-                this.selected_skin_csp_name = csps_ListView.SelectedItems[0].Text;
-                selected_csp_name.Text = "Selected CSP : " + csps_ListView.SelectedItems[0].Text;
-                remove_selected_csp.Enabled = true;
-            }
-
-        }
-
-        private void clean_files_clicked(object sender, EventArgs e)
-        {
-            int index = SkinListBox.SelectedIndex + 1;
-            int max = SkinListBox.Items.Count;
-            Skin current = handler.get_skin(this.selected_char_name, index);
-
-            String modelpath = this.model_destination + "/body/c" + this.selected_skin_slot_model;
-            if (Directory.Exists(modelpath)) { Directory.Delete(modelpath, true); }
-
-            
-                handler.delete_skin_all_csp(this.selected_char_name, this.selected_skin_slot_csp);
-                handler.delete_skin_all_model(this.selected_char_name, this.selected_skin_slot_csp);
-
-                String[] files = Directory.GetFiles(this.csp_destination, "*" + this.selected_char_folder + "_" + this.selected_skin_slot_csp + ".nut", SearchOption.AllDirectories);
-                foreach (String file in files)
-                {
-                    File.Delete(file);
-                    
-                }
-            if (Directory.Exists(this.model_destination))
-            {
-                String[] modelfiles = Directory.GetFiles(this.model_destination, "*", SearchOption.AllDirectories);
-                foreach (String file in modelfiles)
-                {
-                    Console.WriteLine(file);
-                    File.Delete(file);
-
-                }
-            }
-            
-
-            skin_details_reload();
-            
-        }
-
+        #endregion
+        #region Console
+        //Writes string to console
         private void console_write(String s)
         {
-            textConsole.Text += s+"\n";
+            textConsole.Text += s + "\n";
         }
-
-        //Workspace reset button
-        private void resetWorkspaceToolStripMenuItem_Click(object sender, EventArgs e)
+        #endregion
+        #region State
+        //State Checker
+        private void state_check()
         {
-            if (MessageBox.Show("Doing this will erase all contents of the workspace folder which contains every file you've added. Continue with this destruction?", "Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                if (Directory.Exists("workspace"))
-                {
-                    String[] files = Directory.GetFiles("workspace", "*", SearchOption.AllDirectories);
-                    foreach (String file in files)
-                    {
-                        File.Delete(file);
-                    }
-                    Directory.Delete("workspace", true);
-                    Directory.CreateDirectory("workspace");
-                }
-                else
-                {
-                    Directory.CreateDirectory("workspace");
-                }
-                if (!Directory.Exists("workspace"))
-                {
-                    Directory.CreateDirectory("workspace");
-                }
-                console_write("Workspace reset complete");
-            }
-                
-        }
+            int character = CharacterList.SelectedIndex;
+            int skin = SkinListBox.SelectedIndex;
+            int model = models_ListView.SelectedIndices.Count;
+            int csp = csps_ListView.SelectedIndices.Count;
+            String origin = SkinOriginText.Text;
 
-        private void model_selected(object sender, EventArgs e)
-        {
-            if (models_ListView.SelectedItems.Count == 1)
+            if (character == -1)
             {
-                this.selected_skin_model_name = models_ListView.SelectedItems[0].Text;
-                label5.Text = "Selected Model : " + models_ListView.SelectedItems[0].Text;
-                button6.Enabled = true;
-            }
-        }
+                //Interactions
+                models_ListView.AllowDrop = false;
+                csps_ListView.AllowDrop = false;
+                slotbox.AllowDrop = false;
+                button1.Enabled = false;
 
-        private void remove_selected_model_Click(object sender, EventArgs e)
-        {
-            if(this.selected_skin_model_name == "cxx")
-            {
-                foreach(String file in Directory.GetFiles(this.model_destination + "/body/c" + this.selected_skin_slot_model))
-                {
-                    File.Delete(file);
-                }
-                Directory.Delete(this.model_destination + "/body/c" +this.selected_skin_slot_model);
+                //State
             }
             else
             {
-                foreach (String file in Directory.GetFiles(this.model_destination + "/body/l" + this.selected_skin_slot_model))
-                {
-                    File.Delete(file);
-                }
-                Directory.Delete(this.model_destination + "/body/l" + this.selected_skin_slot_model);
+                //Interactions
+                slotbox.AllowDrop = true;
             }
-            
-            handler.delete_skin_model(selected_char_name, int.Parse(this.selected_skin_slot_model)+1, this.selected_skin_model_name);
-            skin_details_reload();
-            skin_ListBox_reload();
-        }
 
-        private void openWorkspace(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("workspace");
+            if (skin == -1)
+            {
+                //Interactions
+                models_ListView.AllowDrop = false;
+                csps_ListView.AllowDrop = false;
+                SkinNameText.Enabled = false;
+                button1.Enabled = false;
+                button2.Enabled = false;
+                button3.Enabled = false;
+                //State
+            }
+            else
+            {
+                //Interactions
+                models_ListView.AllowDrop = true;
+                csps_ListView.AllowDrop = true;
+                SkinNameText.Enabled = true;
+                button1.Enabled = true;
+                if (origin == "default")
+                {
+                    button2.Enabled = true;
+                    button3.Enabled = true;
+                }
+                else
+                {
+                    button2.Enabled = true;
+                }
+            }
+            if (model == 0)
+            {
+                button6.Enabled = false;
+            }
+            else
+            {
+                remove_selected_csp.Enabled = true;
+            }
+            if (csp == 0)
+            {
+                remove_selected_csp.Enabled = false;
+            }
+            else
+            {
+                remove_selected_csp.Enabled = true;
+            }
+
+
+
         }
+        #endregion
+        #region Config
+        //Gets a property
+        private void get_property(String property_name)
+        {
+            properties.get_property(property_name);
+        }
+        //Gets a property
+        private void set_property(String property_name,String property_value)
+        {
+            properties.set_property(property_name, property_value);
+        }
+        #endregion
+
+        #endregion
+
+        
     }
 
 
