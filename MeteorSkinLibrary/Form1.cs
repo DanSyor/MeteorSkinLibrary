@@ -104,10 +104,14 @@ namespace MeteorSkinLibrary
         //Menu Reset Library
         private void menu_reset_library(object sender, EventArgs e)
         {
-            File.Delete("config/Library.xml");
-            File.Copy("config/Default_Library.xml", "config/Library.xml");
-            skin_ListBox_reload();
-            console_write("Library reset complete");
+            if (MessageBox.Show("Doing this will erase all entries in the Library. Skins are still present in the workspace folder. Continue with this destruction?", "Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                File.Delete("config/Library.xml");
+                File.Copy("config/Default_Library.xml", "config/Library.xml");
+                skin_ListBox_reload();
+                console_write("Library reset complete");
+            }
+                
         }
 
         //Character Actions
@@ -388,17 +392,15 @@ namespace MeteorSkinLibrary
         {
             String path = csp_file_list[0];
             String filter = "*" + this.selected_char_folder + "_" + "*.nut";
-            Regex csp_type_regex = new Regex("(chr_|chrn_|stock_)");
-            Regex csp_number_regex = new Regex("_(\\d+)_");
 
             String[] files = Directory.GetFiles(path,filter, SearchOption.AllDirectories);
 
             foreach (String file in files)
             {
-                Console.WriteLine("File Detected :" + file);
-                String type = csp_type_regex.Match(file).Groups[1].ToString();
-                String number = csp_number_regex.Match(file).Groups[1].ToString();
-                copyCSP(file, type + number, (this.selected_skin_slot_csp).ToString());
+                console_write("File Detected :" + Path.GetFileName(file));
+                String type = Path.GetFileName(file).Split('_')[0];
+                String number = Path.GetFileName(file).Split('_')[1];
+                copyCSP(file, type + number, this.selected_skin_slot_csp);
             }
             console_write("All detected CSP were moved to slot "+this.selected_skin_slot_csp);
             skin_details_reload();
@@ -411,9 +413,6 @@ namespace MeteorSkinLibrary
                 String path = filelist[0];
 
                 String filter = "*.nut";
-
-                Regex csp_type_regex = new Regex("(chr_|chrn_|stock_)");
-                Regex csp_number_regex = new Regex("_([0-9]{1,3})_");
 
                 String[] files = Directory.GetFiles(path, filter, SearchOption.AllDirectories);
 
@@ -604,14 +603,17 @@ namespace MeteorSkinLibrary
                     File.Delete(file);
                     
                 }
-
-            String[] modelfiles = Directory.GetFiles(this.model_destination, "*", SearchOption.AllDirectories);
-            foreach (String file in modelfiles)
+            if (Directory.Exists(this.model_destination))
             {
-                Console.WriteLine(file);
-                File.Delete(file);
+                String[] modelfiles = Directory.GetFiles(this.model_destination, "*", SearchOption.AllDirectories);
+                foreach (String file in modelfiles)
+                {
+                    Console.WriteLine(file);
+                    File.Delete(file);
 
+                }
             }
+            
 
             skin_details_reload();
             
@@ -622,27 +624,32 @@ namespace MeteorSkinLibrary
             textConsole.Text += s+"\n";
         }
 
+        //Workspace reset button
         private void resetWorkspaceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists("workspace"))
+            if (MessageBox.Show("Doing this will erase all contents of the workspace folder which contains every file you've added. Continue with this destruction?", "Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                String[] files = Directory.GetFiles("workspace","*",SearchOption.AllDirectories);
-                foreach(String file in files)
+                if (Directory.Exists("workspace"))
                 {
-                    File.Delete(file);
+                    String[] files = Directory.GetFiles("workspace", "*", SearchOption.AllDirectories);
+                    foreach (String file in files)
+                    {
+                        File.Delete(file);
+                    }
+                    Directory.Delete("workspace", true);
+                    Directory.CreateDirectory("workspace");
                 }
-                Directory.Delete("workspace", true);
-                Directory.CreateDirectory("workspace");
+                else
+                {
+                    Directory.CreateDirectory("workspace");
+                }
+                if (!Directory.Exists("workspace"))
+                {
+                    Directory.CreateDirectory("workspace");
+                }
+                console_write("Workspace reset complete");
             }
-            else
-            {
-                Directory.CreateDirectory("workspace");
-            }
-            if (!Directory.Exists("workspace"))
-            {
-                Directory.CreateDirectory("workspace");
-            }
-            console_write("Workspace reset complete");
+                
         }
 
         private void model_selected(object sender, EventArgs e)
@@ -657,9 +664,26 @@ namespace MeteorSkinLibrary
 
         private void remove_selected_model_Click(object sender, EventArgs e)
         {
-            //File.Delete("");
-            handler.delete_skin_model(selected_char_name, int.Parse(selected_skin_slot_model), this.selected_skin_model_name);
+            if(this.selected_skin_model_name == "cxx")
+            {
+                foreach(String file in Directory.GetFiles(this.model_destination + "/body/c" + this.selected_skin_slot_model))
+                {
+                    File.Delete(file);
+                }
+                Directory.Delete(this.model_destination + "/body/c" +this.selected_skin_slot_model);
+            }
+            else
+            {
+                foreach (String file in Directory.GetFiles(this.model_destination + "/body/l" + this.selected_skin_slot_model))
+                {
+                    File.Delete(file);
+                }
+                Directory.Delete(this.model_destination + "/body/l" + this.selected_skin_slot_model);
+            }
+            
+            handler.delete_skin_model(selected_char_name, int.Parse(this.selected_skin_slot_model)+1, this.selected_skin_model_name);
             skin_details_reload();
+            skin_ListBox_reload();
         }
 
         private void openWorkspace(object sender, EventArgs e)
