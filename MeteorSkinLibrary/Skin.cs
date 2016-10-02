@@ -14,6 +14,7 @@ namespace MeteorSkinLibrary
         public String name;
         public Boolean model;
         public ArrayList csps;
+        public ArrayList models;
 
 
         public Skin(int slot,String origin,String name,Boolean model)
@@ -23,6 +24,7 @@ namespace MeteorSkinLibrary
             this.name = name;
             this.model = model;
             csps = new ArrayList();
+            models = new ArrayList();
         }
 
         public Skin()
@@ -32,6 +34,7 @@ namespace MeteorSkinLibrary
             this.name = "dummy";
             this.model = false;
             csps = new ArrayList();
+            models = new ArrayList();
         }
 
 

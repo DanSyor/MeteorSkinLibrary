@@ -32,11 +32,13 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cleanWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.skinsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addForSelectedCharacterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetLibraryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CharacterList = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -53,15 +55,9 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.button4 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.models_ListView = new System.Windows.Forms.ListView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.selected_csp_name = new System.Windows.Forms.Label();
             this.remove_selected_csp = new System.Windows.Forms.Button();
@@ -71,8 +67,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textConsole = new System.Windows.Forms.RichTextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.cleanWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.resetWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.slotbox = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -80,8 +77,8 @@
             this.tabPage2.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -93,7 +90,7 @@
             this.optionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(874, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1199, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -109,9 +106,16 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.menu_software_exit);
+            // 
+            // cleanWorkspaceToolStripMenuItem
+            // 
+            this.cleanWorkspaceToolStripMenuItem.Name = "cleanWorkspaceToolStripMenuItem";
+            this.cleanWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.cleanWorkspaceToolStripMenuItem.Text = "Open Workspace Folder";
+            this.cleanWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.openWorkspace);
             // 
             // skinsToolStripMenuItem
             // 
@@ -152,6 +156,13 @@
             this.resetLibraryToolStripMenuItem.Text = "Reset Library";
             this.resetLibraryToolStripMenuItem.Click += new System.EventHandler(this.menu_reset_library);
             // 
+            // resetWorkspaceToolStripMenuItem
+            // 
+            this.resetWorkspaceToolStripMenuItem.Name = "resetWorkspaceToolStripMenuItem";
+            this.resetWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.resetWorkspaceToolStripMenuItem.Text = "Reset Workspace";
+            this.resetWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.resetWorkspaceToolStripMenuItem_Click);
+            // 
             // CharacterList
             // 
             this.CharacterList.FormattingEnabled = true;
@@ -168,7 +179,7 @@
             this.tabControl1.Location = new System.Drawing.Point(396, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(466, 372);
+            this.tabControl1.Size = new System.Drawing.Size(466, 421);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -177,7 +188,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(458, 346);
+            this.tabPage1.Size = new System.Drawing.Size(458, 395);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Skin Info Editor";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -195,7 +206,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(446, 334);
+            this.groupBox1.Size = new System.Drawing.Size(446, 538);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Skin Information";
@@ -220,7 +231,7 @@
             this.button2.TabIndex = 7;
             this.button2.Text = "Clean All Files";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.clean_files_clicked);
             // 
             // button1
             // 
@@ -288,7 +299,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(458, 346);
+            this.tabPage2.Size = new System.Drawing.Size(458, 395);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "File Manager";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -296,127 +307,65 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.groupBox5);
-            this.groupBox2.Controls.Add(this.groupBox4);
             this.groupBox2.Controls.Add(this.groupBox3);
             this.groupBox2.Location = new System.Drawing.Point(6, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(446, 538);
+            this.groupBox2.Size = new System.Drawing.Size(446, 383);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "File Information";
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.textBox7);
-            this.groupBox5.Controls.Add(this.label12);
+            this.groupBox5.Controls.Add(this.button6);
+            this.groupBox5.Controls.Add(this.label5);
+            this.groupBox5.Controls.Add(this.models_ListView);
             this.groupBox5.Location = new System.Drawing.Point(7, 20);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(433, 60);
+            this.groupBox5.Size = new System.Drawing.Size(433, 187);
             this.groupBox5.TabIndex = 16;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Model";
             // 
-            // textBox7
+            // button6
             // 
-            this.textBox7.Location = new System.Drawing.Point(182, 20);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.ReadOnly = true;
-            this.textBox7.Size = new System.Drawing.Size(188, 20);
-            this.textBox7.TabIndex = 8;
+            this.button6.Enabled = false;
+            this.button6.Location = new System.Drawing.Point(275, 159);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(152, 23);
+            this.button6.TabIndex = 15;
+            this.button6.Text = "Remove Selected Model";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.remove_selected_model_Click);
             // 
-            // label12
+            // label5
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(8, 27);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(69, 13);
-            this.label12.TabIndex = 8;
-            this.label12.Text = "Model Status";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(10, 160);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(98, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "No Selected Model";
             // 
-            // groupBox4
+            // models_ListView
             // 
-            this.groupBox4.Controls.Add(this.label10);
-            this.groupBox4.Controls.Add(this.button5);
-            this.groupBox4.Controls.Add(this.label11);
-            this.groupBox4.Controls.Add(this.textBox5);
-            this.groupBox4.Controls.Add(this.textBox6);
-            this.groupBox4.Controls.Add(this.button4);
-            this.groupBox4.Location = new System.Drawing.Point(9, 253);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(431, 71);
-            this.groupBox4.TabIndex = 15;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Import";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 19);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(97, 13);
-            this.label10.TabIndex = 9;
-            this.label10.Text = "Model Folder (cXX)";
-            // 
-            // button5
-            // 
-            this.button5.Enabled = false;
-            this.button5.Location = new System.Drawing.Point(350, 38);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 13;
-            this.button5.Text = "Move";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.batch_copy_csp);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 43);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(84, 13);
-            this.label11.TabIndex = 10;
-            this.label11.Text = "CSP Folder (chr)";
-            // 
-            // textBox5
-            // 
-            this.textBox5.AllowDrop = true;
-            this.textBox5.Location = new System.Drawing.Point(132, 16);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(188, 20);
-            this.textBox5.TabIndex = 8;
-            this.textBox5.DragDrop += new System.Windows.Forms.DragEventHandler(this.model_DragDrop);
-            this.textBox5.DragEnter += new System.Windows.Forms.DragEventHandler(this.model_DragEnter);
-            // 
-            // textBox6
-            // 
-            this.textBox6.AllowDrop = true;
-            this.textBox6.Location = new System.Drawing.Point(132, 40);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.ReadOnly = true;
-            this.textBox6.Size = new System.Drawing.Size(188, 20);
-            this.textBox6.TabIndex = 11;
-            this.textBox6.DragDrop += new System.Windows.Forms.DragEventHandler(this.csp_DragDrop2);
-            this.textBox6.DragEnter += new System.Windows.Forms.DragEventHandler(this.csp_DragEnter2);
-            // 
-            // button4
-            // 
-            this.button4.Enabled = false;
-            this.button4.Location = new System.Drawing.Point(350, 14);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 12;
-            this.button4.Text = "Move";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.TextChanged += new System.EventHandler(this.batch_move_model);
-            this.button4.Click += new System.EventHandler(this.batch_move_model);
+            this.models_ListView.AllowDrop = true;
+            this.models_ListView.Location = new System.Drawing.Point(9, 19);
+            this.models_ListView.MultiSelect = false;
+            this.models_ListView.Name = "models_ListView";
+            this.models_ListView.Size = new System.Drawing.Size(418, 134);
+            this.models_ListView.TabIndex = 15;
+            this.models_ListView.UseCompatibleStateImageBehavior = false;
+            this.models_ListView.SelectedIndexChanged += new System.EventHandler(this.model_selected);
+            this.models_ListView.DragDrop += new System.Windows.Forms.DragEventHandler(this.model_DragDrop);
+            this.models_ListView.DragEnter += new System.Windows.Forms.DragEventHandler(this.model_DragEnter);
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.selected_csp_name);
             this.groupBox3.Controls.Add(this.remove_selected_csp);
             this.groupBox3.Controls.Add(this.csps_ListView);
-            this.groupBox3.Location = new System.Drawing.Point(9, 86);
+            this.groupBox3.Location = new System.Drawing.Point(9, 213);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(431, 161);
             this.groupBox3.TabIndex = 14;
@@ -445,6 +394,7 @@
             // 
             // csps_ListView
             // 
+            this.csps_ListView.AllowDrop = true;
             this.csps_ListView.Location = new System.Drawing.Point(7, 19);
             this.csps_ListView.MultiSelect = false;
             this.csps_ListView.Name = "csps_ListView";
@@ -452,6 +402,8 @@
             this.csps_ListView.TabIndex = 0;
             this.csps_ListView.UseCompatibleStateImageBehavior = false;
             this.csps_ListView.SelectedIndexChanged += new System.EventHandler(this.csp_selected);
+            this.csps_ListView.DragDrop += new System.Windows.Forms.DragEventHandler(this.csp_DragDrop2);
+            this.csps_ListView.DragEnter += new System.Windows.Forms.DragEventHandler(this.model_DragEnter);
             // 
             // SkinListBox
             // 
@@ -482,39 +434,59 @@
             // 
             // textConsole
             // 
-            this.textConsole.Location = new System.Drawing.Point(400, 422);
+            this.textConsole.Location = new System.Drawing.Point(868, 49);
             this.textConsole.Name = "textConsole";
-            this.textConsole.Size = new System.Drawing.Size(458, 179);
+            this.textConsole.Size = new System.Drawing.Size(319, 554);
             this.textConsole.TabIndex = 4;
             this.textConsole.Text = "";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(403, 406);
+            this.label9.Location = new System.Drawing.Point(868, 33);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(45, 13);
             this.label9.TabIndex = 7;
             this.label9.Text = "Console";
             // 
-            // cleanWorkspaceToolStripMenuItem
+            // panel1
             // 
-            this.cleanWorkspaceToolStripMenuItem.Name = "cleanWorkspaceToolStripMenuItem";
-            this.cleanWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.cleanWorkspaceToolStripMenuItem.Text = "Clean Workspace";
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.slotbox);
+            this.panel1.Controls.Add(this.label6);
+            this.panel1.Location = new System.Drawing.Point(400, 450);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(458, 153);
+            this.panel1.TabIndex = 16;
             // 
-            // resetWorkspaceToolStripMenuItem
+            // label6
             // 
-            this.resetWorkspaceToolStripMenuItem.Name = "resetWorkspaceToolStripMenuItem";
-            this.resetWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.resetWorkspaceToolStripMenuItem.Text = "Reset Workspace";
-            this.resetWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.resetWorkspaceToolStripMenuItem_Click);
+            this.label6.AutoSize = true;
+            this.label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label6.Location = new System.Drawing.Point(166, 42);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(113, 15);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Slot Import Drop Zone";
+            // 
+            // slotbox
+            // 
+            this.slotbox.AllowDrop = true;
+            this.slotbox.Location = new System.Drawing.Point(22, 107);
+            this.slotbox.Name = "slotbox";
+            this.slotbox.ReadOnly = true;
+            this.slotbox.Size = new System.Drawing.Size(418, 20);
+            this.slotbox.TabIndex = 16;
+            this.slotbox.Text = "Drop your slot skin here, matey!";
+            this.slotbox.DragDrop += new System.Windows.Forms.DragEventHandler(this.slot_DragDrop);
+            this.slotbox.DragEnter += new System.Windows.Forms.DragEventHandler(this.slot_DragEnter);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(874, 613);
+            this.ClientSize = new System.Drawing.Size(1199, 620);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textConsole);
             this.Controls.Add(this.label4);
@@ -537,10 +509,10 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -576,22 +548,19 @@
         private System.Windows.Forms.ToolStripMenuItem addForSelectedCharacterToolStripMenuItem;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ListView csps_ListView;
         private System.Windows.Forms.Button remove_selected_csp;
         private System.Windows.Forms.Label selected_csp_name;
         private System.Windows.Forms.ToolStripMenuItem cleanWorkspaceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetWorkspaceToolStripMenuItem;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ListView models_ListView;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox slotbox;
     }
 }
 

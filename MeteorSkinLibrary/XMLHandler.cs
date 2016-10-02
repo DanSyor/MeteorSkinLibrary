@@ -59,24 +59,22 @@ namespace MeteorSkinLibrary
 
             foreach (XmlElement node in nodes)
             {
+                //Adding Skin info
                 skin.name = node.GetAttribute("name");
                 skin.origin = node.GetAttribute("origin");
                 skin.slot = int.Parse(node.GetAttribute("slot"));
 
-                XmlNode model = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']/Model");
-
-                if (model.InnerText == "Imported")
-                {
-                    skin.model = true;
-                }else
-                {
-                    skin.model = false;
-                }
-
+                //Adding csps to skin
                 XmlNodeList csps = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']/csp");
-                foreach(XmlElement csp in csps)
+                foreach (XmlElement csp in csps)
                 {
                     skin.csps.Add(csp.InnerText);
+                }
+                //Adding models to skin
+                XmlNodeList models = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']/model");
+                foreach (XmlElement modelz in models)
+                {
+                    skin.models.Add(modelz.InnerText);
                 }
             }
 
@@ -97,10 +95,7 @@ namespace MeteorSkinLibrary
                     node.SetAttribute("name", skin.name);
                     xml.Save(LibraryPath);
                 }
-
             }
-
-
         }
 
         //Adds a Dummy Skin
@@ -113,16 +108,28 @@ namespace MeteorSkinLibrary
             xmlSkin.SetAttribute("slot", slot.ToString());
             xmlSkin.SetAttribute("name", "Dummy");
             xmlSkin.SetAttribute("origin", "Custom");
-            XmlElement model = xml.CreateElement("Model");
-            model.InnerText = "Not Found";
-            xmlSkin.AppendChild(model);
 
             xmlChar.AppendChild(xmlSkin);
             xml.Save(LibraryPath);
 
 
         }
+        //Adds a Dummy Skin
+        public void add_skin(String Charname, int slot,String skin_name)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.Load(LibraryPath);
+            XmlNode xmlChar = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']");
+            XmlElement xmlSkin = xml.CreateElement("skin");
+            xmlSkin.SetAttribute("slot", slot.ToString());
+            xmlSkin.SetAttribute("name", skin_name);
+            xmlSkin.SetAttribute("origin", "Custom");
 
+            xmlChar.AppendChild(xmlSkin);
+            xml.Save(LibraryPath);
+
+
+        }
         //Clears Skin values
         internal void clean_skin(string Charname, int slot)
         {
@@ -160,18 +167,30 @@ namespace MeteorSkinLibrary
         }
 
         //Sets the model element
-        internal void set_skin_model(string Charname, int slot, String status)
+        internal void add_skin_model(string Charname, int slot, String name)
         {
-            XmlDocument xml = new XmlDocument();
+            Boolean exists = false;
+           XmlDocument xml = new XmlDocument();
             xml.Load(LibraryPath);
-            XmlNode node = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']");
-            foreach(XmlElement xe in node.ChildNodes)
+            XmlElement model = xml.CreateElement("model");
+            model.InnerText = name;
+            Console.WriteLine("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']");
+            XmlNode character_skin = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']");
+            XmlNodeList models = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']/model");
+            foreach(XmlElement modele in models)
             {
-                if (xe.Name == "Model")
+                if(modele.InnerText == name)
                 {
-                    xe.InnerText = status;
+                    Console.WriteLine(modele.InnerText+"-"+name);
+                    exists = true;
                 }
             }
+            if (!exists)
+            {
+                character_skin.AppendChild(model);
+            }
+            
+
             xml.Save(LibraryPath);
 
         }
@@ -179,13 +198,26 @@ namespace MeteorSkinLibrary
         //Add a CSP file to a skin
         internal void add_skin_csp(String Charname, int slot, String name)
         {
+            Boolean exists = false;
             XmlDocument xml = new XmlDocument();
             xml.Load(LibraryPath);
             XmlElement csp = xml.CreateElement("csp");
             csp.InnerText = name;
 
             XmlNode character_skin = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']");
-            character_skin.AppendChild(csp);
+            XmlNodeList csps = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']/csp");
+            foreach (XmlElement cspe in csps)
+            {
+                if (cspe.InnerText == name)
+                {
+                    Console.WriteLine(cspe.InnerText + "-" + name);
+                    exists = true;
+                }
+            }
+            if (!exists)
+            {
+                character_skin.AppendChild(csp);
+            }
 
             xml.Save(LibraryPath);
 
@@ -198,14 +230,14 @@ namespace MeteorSkinLibrary
             xml.Load(LibraryPath);
 
             XmlNodeList character_skin = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']/csp");
-            foreach(XmlElement csp in character_skin)
+            foreach (XmlElement csp in character_skin)
             {
-                if(csp.InnerText == name)
+                if (csp.InnerText == name)
                 {
                     XmlNode csps = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']");
                     csps.RemoveChild(csp);
                 }
-                
+
             }
 
             xml.Save(LibraryPath);
@@ -213,13 +245,62 @@ namespace MeteorSkinLibrary
 
         internal String get_dlc_status(String Charname)
         {
-            String dlc_status ="";
+            String dlc_status = "";
             XmlDocument xml = new XmlDocument();
             xml.Load(LibraryPath);
             XmlNode character = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']");
 
             return character.Attributes["dlc"].Value;
-                
+
+        }
+
+        internal void delete_skin_all_csp(string Charname, string slot)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.Load(LibraryPath);
+
+            XmlNodeList character_skin = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + int.Parse(slot).ToString() + "']/csp");
+            foreach (XmlElement csp in character_skin)
+            {
+                XmlNode csps = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + int.Parse(slot).ToString() + "']");
+                csps.RemoveChild(csp);
+            }
+
+            xml.Save(LibraryPath);
+        }
+
+        internal void delete_skin_all_model(string Charname, string slot)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.Load(LibraryPath);
+
+            XmlNodeList character_skin = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + int.Parse(slot).ToString() + "']/model");
+            foreach (XmlElement csp in character_skin)
+            {
+                XmlNode csps = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + int.Parse(slot).ToString() + "']");
+                csps.RemoveChild(csp);
+            }
+
+            xml.Save(LibraryPath);
+        }
+
+        internal void delete_skin_model(string Charname, int slot, string name)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.Load(LibraryPath);
+
+            XmlNodeList character_skin = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']/model");
+            foreach (XmlElement csp in character_skin)
+            {
+                if (csp.InnerText == name)
+                {
+                    XmlNode csps = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']");
+                    csps.RemoveChild(csp);
+                }
+
+            }
+
+            xml.Save(LibraryPath);
         }
     }
 
