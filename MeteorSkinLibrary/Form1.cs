@@ -17,8 +17,7 @@ namespace MeteorSkinLibrary
     {
         //Variables
         #region Handlers
-        XMLHandler handler = new XMLHandler();
-        fileHandler filehandler = new fileHandler();
+        XMLHandler handler;
         ConfigHandler properties = new ConfigHandler("config/Default_Config.xml");
         #endregion
         #region SelectedInfo
@@ -67,26 +66,26 @@ namespace MeteorSkinLibrary
             }
             else
             {
-                //Checks Library.xml presence, if not creates one based on Default_Library.xml
-                if (!File.Exists(properties.get("default_library")))
+                //Checks Config.xml presence, if not creates one based on Default_Config.xml
+                if (!File.Exists("config/Config.xml"))
                 {
-                    console_write("Creating Library...");
+                    console_write("Creating Config");
+                    File.Copy(properties.get("default_config"), "config/Config.xml");
+                }
+                    properties.set_library_path("config/Config.xml");
+                console_write("Config loaded : config/Config.xml");
+
+                //Checks Library.xml presence, if not creates one based on Default_Library.xml
+                if (!File.Exists("config/Library.xml"))
+                {
+                    console_write("Creating Library");
                     File.Copy(properties.get("default_library"), "config/Library.xml");
                     properties.add("current_library", "config/Library.xml");
-                    console_write("Done.");
-                }else
-                {
-                    properties.set_library_path(properties.get("current_config"));
                 }
-                //Checks Config.xml presence, if not creates one based on Default_Config.xml
-                if (!File.Exists(properties.get("default_config")))
-                {
-                    console_write("Creating Config...");
-                    File.Copy(properties.get("default_config"), "config/Config.xml");
-                    properties.add("current_config", "config/Config.xml");
-                    properties.set_library_path(properties.get("current_config"));
-                    console_write("Done.");
-                }
+
+                
+                handler = new XMLHandler(properties.get("current_library"));
+                console_write("Library loaded : "+properties.get("current_library"));
 
                 //Loads Character List
                 Characters = handler.get_character_list();

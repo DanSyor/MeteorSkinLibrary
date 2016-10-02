@@ -31,8 +31,8 @@ namespace MeteorSkinLibrary
         {
             XmlDocument xml = new XmlDocument();
             xml.Load(LibraryPath);
-            XmlNode character = xml.SelectSingleNode("/config/property[attribute::name='" + property_name + "']");
-            return character.InnerText;
+            XmlNode property = xml.SelectSingleNode("/config/property[attribute::name='" + property_name + "']");
+            return property.InnerText;
         }
         internal void set(string property_name, string property_value)
         {
@@ -48,7 +48,8 @@ namespace MeteorSkinLibrary
             XmlDocument xml = new XmlDocument();
             xml.Load(LibraryPath);
             XmlNode properties = xml.SelectSingleNode("/config");
-            XmlElement property = xml.CreateElement(property_name);
+            XmlElement property = xml.CreateElement("property");
+            property.SetAttribute("name", property_name);
             property.InnerText = property_value;
             properties.AppendChild(property);
             xml.Save(LibraryPath);
