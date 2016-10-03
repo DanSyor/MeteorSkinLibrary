@@ -13,7 +13,7 @@ namespace MeteorSkinLibrary
 {
     public partial class config : Form
     {
-        public ConfigHandler properties = new ConfigHandler("config/Config.xml");
+        public PropertyHandler properties = new PropertyHandler("config/Config.xml");
 
         public config()
         {
@@ -40,7 +40,7 @@ namespace MeteorSkinLibrary
             }
         }
 
-        public void set_properties_handler(ConfigHandler config)
+        public void set_properties_handler(PropertyHandler config)
         {
             this.properties = config;
         }

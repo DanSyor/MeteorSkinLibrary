@@ -9,18 +9,18 @@ using System.Xml.Linq;
 
 namespace MeteorSkinLibrary
 {
-    public class ConfigHandler
+    public class PropertyHandler
     {
         private string LibraryPath;
 
         #region Constructors
         //basic
-        public ConfigHandler()
+        public PropertyHandler()
         {
             LibraryPath = "";
         }
         //With folderpath
-        public ConfigHandler(string custom_LibraryPath)
+        public PropertyHandler(string custom_LibraryPath)
         {
             LibraryPath = custom_LibraryPath;
         }

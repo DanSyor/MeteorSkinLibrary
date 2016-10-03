@@ -39,6 +39,7 @@
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetLibraryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CharacterList = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -62,15 +63,26 @@
             this.selected_csp_name = new System.Windows.Forms.Label();
             this.remove_selected_csp = new System.Windows.Forms.Button();
             this.csps_ListView = new System.Windows.Forms.ListView();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SkinListBox = new System.Windows.Forms.ListBox();
             this.skinboxlabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.textConsole = new System.Windows.Forms.RichTextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label6 = new System.Windows.Forms.Label();
             this.slotbox = new System.Windows.Forms.TextBox();
-            this.resetConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label6 = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -79,6 +91,8 @@
             this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -165,6 +179,13 @@
             this.resetWorkspaceToolStripMenuItem.Text = "Reset Workspace";
             this.resetWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.reset_workspace);
             // 
+            // resetConfigToolStripMenuItem
+            // 
+            this.resetConfigToolStripMenuItem.Name = "resetConfigToolStripMenuItem";
+            this.resetConfigToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.resetConfigToolStripMenuItem.Text = "Reset Config";
+            this.resetConfigToolStripMenuItem.Click += new System.EventHandler(this.reset_config);
+            // 
             // CharacterList
             // 
             this.CharacterList.FormattingEnabled = true;
@@ -178,6 +199,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(396, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -192,7 +214,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(458, 395);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Skin Info Editor";
+            this.tabPage1.Text = "Library Skin Info";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // groupBox1
@@ -407,6 +429,112 @@
             this.csps_ListView.DragDrop += new System.Windows.Forms.DragEventHandler(this.csp_DragDrop2);
             this.csps_ListView.DragEnter += new System.Windows.Forms.DragEventHandler(this.model_DragEnter);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.groupBox4);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(458, 395);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Skin Metadata";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.button4);
+            this.groupBox4.Controls.Add(this.textBox4);
+            this.groupBox4.Controls.Add(this.label11);
+            this.groupBox4.Controls.Add(this.label7);
+            this.groupBox4.Controls.Add(this.textBox3);
+            this.groupBox4.Controls.Add(this.label8);
+            this.groupBox4.Controls.Add(this.textBox2);
+            this.groupBox4.Controls.Add(this.label10);
+            this.groupBox4.Controls.Add(this.textBox1);
+            this.groupBox4.Location = new System.Drawing.Point(22, 17);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(418, 356);
+            this.groupBox4.TabIndex = 6;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Metadata";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(9, 327);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(403, 23);
+            this.button4.TabIndex = 8;
+            this.button4.Text = "Save Metadata";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.meta_save);
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(124, 101);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.ReadOnly = true;
+            this.textBox4.Size = new System.Drawing.Size(188, 20);
+            this.textBox4.TabIndex = 7;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 104);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(49, 13);
+            this.label11.TabIndex = 6;
+            this.label11.Text = "TitleIdFix";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 26);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(38, 13);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Author";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(124, 75);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.ReadOnly = true;
+            this.textBox3.Size = new System.Drawing.Size(188, 20);
+            this.textBox3.TabIndex = 5;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 52);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(42, 13);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "Version";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(124, 49);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(188, 20);
+            this.textBox2.TabIndex = 4;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 78);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(35, 13);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "Name";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(124, 23);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(188, 20);
+            this.textBox1.TabIndex = 3;
+            // 
             // SkinListBox
             // 
             this.SkinListBox.FormattingEnabled = true;
@@ -461,16 +589,6 @@
             this.panel1.Size = new System.Drawing.Size(458, 153);
             this.panel1.TabIndex = 16;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label6.Location = new System.Drawing.Point(166, 42);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(113, 15);
-            this.label6.TabIndex = 15;
-            this.label6.Text = "Slot Import Drop Zone";
-            // 
             // slotbox
             // 
             this.slotbox.AllowDrop = true;
@@ -479,22 +597,33 @@
             this.slotbox.ReadOnly = true;
             this.slotbox.Size = new System.Drawing.Size(418, 20);
             this.slotbox.TabIndex = 16;
-            this.slotbox.Text = "Drop your slot skin here, matey!";
+            this.slotbox.Text = "Drop your meteor skin here, matey!";
             this.slotbox.DragDrop += new System.Windows.Forms.DragEventHandler(this.slot_DragDrop);
             this.slotbox.DragEnter += new System.Windows.Forms.DragEventHandler(this.slot_DragEnter);
             // 
-            // resetConfigToolStripMenuItem
+            // label6
             // 
-            this.resetConfigToolStripMenuItem.Name = "resetConfigToolStripMenuItem";
-            this.resetConfigToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.resetConfigToolStripMenuItem.Text = "Reset Config";
-            this.resetConfigToolStripMenuItem.Click += new System.EventHandler(this.reset_config);
+            this.label6.AutoSize = true;
+            this.label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label6.Location = new System.Drawing.Point(166, 42);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(120, 15);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Meteor Skin Drop Zone";
             // 
-            // Form1
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(1093, 364);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(100, 23);
+            this.progressBar1.TabIndex = 17;
+            // 
+            // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1199, 620);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textConsole);
@@ -506,7 +635,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "main";
             this.Text = "Mowjoh\'s Meteor Skin Library Alpha";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -520,6 +649,9 @@
             this.groupBox5.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -571,6 +703,18 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox slotbox;
         private System.Windows.Forms.ToolStripMenuItem resetConfigToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button button4;
     }
 }
 

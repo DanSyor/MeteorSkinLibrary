@@ -9,17 +9,17 @@ using System.Xml.Linq;
 
 namespace MeteorSkinLibrary
 {
-    class XMLHandler
+    class LibraryHandler
     {
         //Library path
         String LibraryPath = "config/Library.xml";
 
-        public XMLHandler(String custom_Library_path)
+        public LibraryHandler(String custom_Library_path)
         {
             this.LibraryPath = custom_Library_path;
         }
 
-        public XMLHandler()
+        public LibraryHandler()
         {
 
         }

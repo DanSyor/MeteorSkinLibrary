@@ -17,8 +17,9 @@ namespace MeteorSkinLibrary
     {
         //Variables
         #region Handlers
-        XMLHandler handler;
-        ConfigHandler properties = new ConfigHandler("config/Default_Config.xml");
+        LibraryHandler handler;
+        PropertyHandler properties = new PropertyHandler("config/Default_Config.xml");
+        MetaHandler meta = new MetaHandler("config/meta/Default_Meta.xml");
         #endregion
         #region SelectedInfo
         //Name in the list
@@ -50,6 +51,7 @@ namespace MeteorSkinLibrary
         //destination
         String csp_destination;
         String model_destination;
+        String meta_destination;
         #endregion
 
         public main()
@@ -84,7 +86,7 @@ namespace MeteorSkinLibrary
                 }
 
                 
-                handler = new XMLHandler(properties.get("current_library"));
+                handler = new LibraryHandler(properties.get("current_library"));
                 console_write("Library loaded : "+properties.get("current_library"));
 
                 //Loads Character List
@@ -190,7 +192,9 @@ namespace MeteorSkinLibrary
             state_check();
             this.selected_char_name = CharacterList.SelectedItem.ToString();
             this.selected_char_folder = handler.get_folder_name(this.selected_char_name);
+            
             this.model_destination = "workspace/data/fighter/" + this.selected_char_folder + "/";
+            this.meta_destination = "config/meta/" + this.selected_char_folder + "/";
 
             if (handler.get_dlc_status(selected_char_name) == "yes")
             {
@@ -211,6 +215,7 @@ namespace MeteorSkinLibrary
         {
             skin_details_reload();
             state_check();
+            metadata_reload();
         }
 
         //Skin Info Saved button is pressed
@@ -355,6 +360,22 @@ namespace MeteorSkinLibrary
             state_check();
         }
         #endregion
+        #region MetaDataAction
+        //When you save all metadata
+        void meta_save(object sender, EventArgs e)
+        {
+            String author = textBox1.Text;
+            String version = textBox2.Text;
+            String name = textBox3.Text;
+            String textidfix = textBox4.Text;
+            meta.set("author", author);
+            meta.set("version", version);
+            meta.set("name", name);
+            meta.set("textidfix", textidfix);
+
+            metadata_reload();
+        }
+        #endregion
 
         #region Interface
         #region Reloads
@@ -411,6 +432,58 @@ namespace MeteorSkinLibrary
             {
                 SkinListBox.Items.Add(skin);
             }
+        }
+        //Reloads MetaData
+        private void metadata_reload()
+        {
+            String meta_slot_path=this.meta_destination+"slot_"+(this.selected_skin_slot+1);
+            Console.WriteLine("slot path :" + meta_slot_path);
+            PropertyHandler properties = new PropertyHandler("config/Config.xml");
+
+            //Reset boxes
+            textBox1.Text = "";
+            textBox2.Text = "";
+            textBox3.Text = "";
+            textBox4.Text = "";
+
+            //Check meta destination folder
+            if (!Directory.Exists(this.meta_destination)){
+                Directory.CreateDirectory(this.meta_destination);
+            }
+            //Check meta destination slot folder
+            if (!Directory.Exists(meta_slot_path)){
+                //If non existant, create folder and append meta based on default
+                Directory.CreateDirectory(meta_slot_path);
+                File.Copy(properties.get("default_meta"),meta_slot_path+"/meta.xml");
+                meta.set_library_path(meta_slot_path + "/meta.xml");
+                textBox1.Text = meta.get("author");
+                textBox2.Text = meta.get("version");
+                textBox3.Text = meta.get("name");
+                textBox4.Text = meta.get("textidfix");
+            }
+            else
+            {
+                if(File.Exists(meta_slot_path + "/meta.xml"))
+                {
+                    meta.set_library_path(meta_slot_path + "/meta.xml");
+                    textBox1.Text = meta.get("author");
+                    textBox2.Text = meta.get("version");
+                    textBox3.Text = meta.get("name");
+                    textBox4.Text = meta.get("textidfix");
+                }else
+                {
+                    File.Copy(properties.get("default_meta"), meta_slot_path + "/meta.xml");
+                    meta.set_library_path(meta_slot_path + "/meta.xml");
+                    textBox1.Text = meta.get("author");
+                    textBox2.Text = meta.get("version");
+                    textBox3.Text = meta.get("name");
+                    textBox4.Text = meta.get("textidfix");
+                }
+
+            }
+            
+
+
         }
 
         #endregion
@@ -779,6 +852,11 @@ namespace MeteorSkinLibrary
                 button1.Enabled = false;
                 button2.Enabled = false;
                 button3.Enabled = false;
+                button4.Enabled = false;
+                textBox1.ReadOnly = true;
+                textBox2.ReadOnly = true;
+                textBox3.ReadOnly = true;
+                textBox4.ReadOnly = true;
                 //State
             }
             else
@@ -788,6 +866,11 @@ namespace MeteorSkinLibrary
                 csps_ListView.AllowDrop = true;
                 SkinNameText.Enabled = true;
                 button1.Enabled = true;
+                button4.Enabled = true;
+                textBox1.ReadOnly = false;
+                textBox2.ReadOnly = false;
+                textBox3.ReadOnly = false;
+                textBox4.ReadOnly = false;
                 if (origin == "default")
                 {
                     button2.Enabled = true;
@@ -830,11 +913,13 @@ namespace MeteorSkinLibrary
         {
             properties.set(property_name, property_value);
         }
-        #endregion
+
 
         #endregion
 
-        
+        #endregion
+
+
     }
 
 
