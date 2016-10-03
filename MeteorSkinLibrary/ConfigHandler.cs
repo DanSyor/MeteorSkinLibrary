@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace MeteorSkinLibrary
 {
-    internal class ConfigHandler
+    public class ConfigHandler
     {
         private string LibraryPath;
 
@@ -17,7 +17,7 @@ namespace MeteorSkinLibrary
         //basic
         public ConfigHandler()
         {
-
+            LibraryPath = "";
         }
         //With folderpath
         public ConfigHandler(string custom_LibraryPath)
@@ -48,10 +48,27 @@ namespace MeteorSkinLibrary
             XmlDocument xml = new XmlDocument();
             xml.Load(LibraryPath);
             XmlNode properties = xml.SelectSingleNode("/config");
-            XmlElement property = xml.CreateElement("property");
-            property.SetAttribute("name", property_name);
-            property.InnerText = property_value;
-            properties.AppendChild(property);
+
+            XmlNode verify = xml.SelectSingleNode("/config/property[attribute::name='" + property_name + "']");
+            if(verify == null)
+            {
+                XmlElement property = xml.CreateElement("property");
+                property.SetAttribute("name", property_name);
+                property.InnerText = property_value;
+                properties.AppendChild(property);
+            }
+            else
+            {
+                XmlNode config = xml.SelectSingleNode("/config");
+                config.RemoveChild(verify);
+
+                XmlElement property = xml.CreateElement("property");
+                property.SetAttribute("name", property_name);
+                property.InnerText = property_value;
+                properties.AppendChild(property);
+
+            }
+            
             xml.Save(LibraryPath);
         }
         #endregion

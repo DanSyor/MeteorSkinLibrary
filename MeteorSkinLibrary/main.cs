@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace MeteorSkinLibrary
 {
-    public partial class Form1 : Form
+    public partial class main : Form
     {
         //Variables
         #region Handlers
@@ -52,7 +52,7 @@ namespace MeteorSkinLibrary
         String model_destination;
         #endregion
 
-        public Form1()
+        public main()
         {
             InitializeComponent();
             //Checks Default_Library.xml presence
@@ -121,8 +121,11 @@ namespace MeteorSkinLibrary
         #endregion
         #region OptionMenu
         //Menu Config Function
-        private void menu_config(object sender, EventArgs e)
+        public void menu_config(object sender, EventArgs e)
         {
+            config cnf = new config();
+            
+            cnf.Show();
             state_check();
         }
         //Menu Reset Library
