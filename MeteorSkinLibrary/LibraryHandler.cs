@@ -91,6 +91,15 @@ namespace MeteorSkinLibrary
             return skin;
         }
 
+        public String get_skin_character_name(String charfolder)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.Load(LibraryPath);
+            XmlNode character = xml.SelectSingleNode("/Roaster/Character[attribute::foldername='" + charfolder + "']");
+
+            return character.Attributes["name"].Value;
+        }
+
         //Sets values to a Skin
         public void set_skin(String Charname, int slot, Skin skin)
         {

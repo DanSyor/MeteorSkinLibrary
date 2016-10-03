@@ -40,6 +40,8 @@
             this.resetLibraryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.smashExplorerInterfaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importSmashExplorerWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CharacterList = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -82,7 +84,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.slotbox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -102,7 +103,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.skinsToolStripMenuItem,
-            this.optionsToolStripMenuItem});
+            this.optionsToolStripMenuItem,
+            this.smashExplorerInterfaceToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1199, 24);
@@ -185,6 +187,21 @@
             this.resetConfigToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.resetConfigToolStripMenuItem.Text = "Reset Config";
             this.resetConfigToolStripMenuItem.Click += new System.EventHandler(this.reset_config);
+            // 
+            // smashExplorerInterfaceToolStripMenuItem
+            // 
+            this.smashExplorerInterfaceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.importSmashExplorerWorkspaceToolStripMenuItem});
+            this.smashExplorerInterfaceToolStripMenuItem.Name = "smashExplorerInterfaceToolStripMenuItem";
+            this.smashExplorerInterfaceToolStripMenuItem.Size = new System.Drawing.Size(145, 20);
+            this.smashExplorerInterfaceToolStripMenuItem.Text = "SmashExplorer Interface";
+            // 
+            // importSmashExplorerWorkspaceToolStripMenuItem
+            // 
+            this.importSmashExplorerWorkspaceToolStripMenuItem.Name = "importSmashExplorerWorkspaceToolStripMenuItem";
+            this.importSmashExplorerWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.importSmashExplorerWorkspaceToolStripMenuItem.Text = "Import SmashExplorer workspace";
+            this.importSmashExplorerWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.launch_se_import);
             // 
             // CharacterList
             // 
@@ -611,19 +628,11 @@
             this.label6.TabIndex = 15;
             this.label6.Text = "Meteor Skin Drop Zone";
             // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(1093, 364);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(100, 23);
-            this.progressBar1.TabIndex = 17;
-            // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1199, 620);
-            this.Controls.Add(this.progressBar1);
+            this.ClientSize = new System.Drawing.Size(1199, 621);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textConsole);
@@ -635,6 +644,8 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximumSize = new System.Drawing.Size(1215, 660);
+            this.MinimumSize = new System.Drawing.Size(1215, 660);
             this.Name = "main";
             this.Text = "Mowjoh\'s Meteor Skin Library Alpha";
             this.menuStrip1.ResumeLayout(false);
@@ -711,10 +722,11 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.ToolStripMenuItem smashExplorerInterfaceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importSmashExplorerWorkspaceToolStripMenuItem;
     }
 }
 
