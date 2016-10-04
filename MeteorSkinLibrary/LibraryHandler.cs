@@ -96,7 +96,6 @@ namespace MeteorSkinLibrary
             XmlDocument xml = new XmlDocument();
             xml.Load(LibraryPath);
             XmlNode character = xml.SelectSingleNode("/Roaster/Character[attribute::foldername='" + charfolder + "']");
-
             return character.Attributes["name"].Value;
         }
 
@@ -155,8 +154,18 @@ namespace MeteorSkinLibrary
             XmlDocument xml = new XmlDocument();
             xml.Load(LibraryPath);
             XmlNode node = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']");
-            node.Attributes["origin"].Value = "EMPTY";
-            node.Attributes["name"].Value = "EMPTY";
+            XmlNodeList models = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']/model");
+            XmlNodeList csps = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']/csp");
+            foreach(XmlElement xe in models)
+            {
+                node.RemoveChild(xe);
+            }
+            foreach (XmlElement xe in csps)
+            {
+                node.RemoveChild(xe);
+            }
+
+            
             xml.Save(LibraryPath);
 
 
@@ -196,19 +205,11 @@ namespace MeteorSkinLibrary
             Console.WriteLine("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']");
             XmlNode character_skin = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']");
             XmlNodeList models = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']/model");
-            foreach(XmlElement modele in models)
-            {
-                if(modele.InnerText == name)
-                {
-                    Console.WriteLine(modele.InnerText+"-"+name);
-                    exists = true;
-                }
-            }
-            if (!exists)
+            if (check_skin(Charname, slot))
             {
                 character_skin.AppendChild(model);
             }
-            
+
 
             xml.Save(LibraryPath);
 
@@ -322,7 +323,47 @@ namespace MeteorSkinLibrary
             xml.Save(LibraryPath);
         }
 
-        
+        internal Boolean check_skin(string Charname, int slot)
+        {
+            Boolean test = false;
+            XmlDocument xml = new XmlDocument();
+            xml.Load(LibraryPath);
+
+            XmlNodeList character_skin = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']/skin[attribute::slot='" + slot + "']");
+            if(character_skin.Count != 0)
+            {
+                test = true;
+            }
+            return test;
+        }
+
+        internal Boolean check_character(string Charname)
+        {
+            Boolean test = false;
+            XmlDocument xml = new XmlDocument();
+            xml.Load(LibraryPath);
+
+            XmlNodeList character_skin = xml.SelectNodes("/Roaster/Character[attribute::name='" + Charname + "']");
+            if (character_skin.Count != 0)
+            {
+                test = true;
+            }
+            return test;
+        }
+
+        internal Boolean check_character_foldername(string character_folder)
+        {
+            Boolean test = false;
+            XmlDocument xml = new XmlDocument();
+            xml.Load(LibraryPath);
+
+            XmlNodeList character_skin = xml.SelectNodes("/Roaster/Character[attribute::foldername='" + character_folder + "']");
+            if (character_skin.Count != 0)
+            {
+                test = true;
+            }
+            return test;
+        }
     }
 
 
