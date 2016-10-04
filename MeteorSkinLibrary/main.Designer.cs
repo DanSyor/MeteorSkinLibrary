@@ -84,6 +84,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.slotbox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.resetAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button5 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -155,7 +157,8 @@
             this.configurationToolStripMenuItem,
             this.resetLibraryToolStripMenuItem,
             this.resetWorkspaceToolStripMenuItem,
-            this.resetConfigToolStripMenuItem});
+            this.resetConfigToolStripMenuItem,
+            this.resetAllToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -236,6 +239,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button5);
             this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.button1);
@@ -628,6 +632,23 @@
             this.label6.TabIndex = 15;
             this.label6.Text = "Meteor Skin Drop Zone";
             // 
+            // resetAllToolStripMenuItem
+            // 
+            this.resetAllToolStripMenuItem.Name = "resetAllToolStripMenuItem";
+            this.resetAllToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.resetAllToolStripMenuItem.Text = "Reset All";
+            this.resetAllToolStripMenuItem.Click += new System.EventHandler(this.reset_all);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(161, 221);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(125, 23);
+            this.button5.TabIndex = 9;
+            this.button5.Text = "Package Meteor Skin";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.package_meteor);
+            // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -647,7 +668,7 @@
             this.MaximumSize = new System.Drawing.Size(1215, 660);
             this.MinimumSize = new System.Drawing.Size(1215, 660);
             this.Name = "main";
-            this.Text = "Mowjoh\'s Meteor Skin Library Alpha";
+            this.Text = "Mowjoh\'s Meteor Skin Library Alpha R4";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -727,6 +748,8 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ToolStripMenuItem smashExplorerInterfaceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importSmashExplorerWorkspaceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetAllToolStripMenuItem;
+        private System.Windows.Forms.Button button5;
     }
 }
 
