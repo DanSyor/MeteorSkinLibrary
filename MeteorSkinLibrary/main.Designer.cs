@@ -40,12 +40,14 @@
             this.resetLibraryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smashExplorerInterfaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importSmashExplorerWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CharacterList = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -84,8 +86,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.slotbox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.resetAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button5 = new System.Windows.Forms.Button();
+            this.exportSmashExplorerWorkpaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -134,7 +135,7 @@
             this.cleanWorkspaceToolStripMenuItem.Name = "cleanWorkspaceToolStripMenuItem";
             this.cleanWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.cleanWorkspaceToolStripMenuItem.Text = "Open Workspace Folder";
-            this.cleanWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.openWorkspace);
+            this.cleanWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.openmmsl_workspace);
             // 
             // skinsToolStripMenuItem
             // 
@@ -182,7 +183,7 @@
             this.resetWorkspaceToolStripMenuItem.Name = "resetWorkspaceToolStripMenuItem";
             this.resetWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.resetWorkspaceToolStripMenuItem.Text = "Reset Workspace";
-            this.resetWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.reset_workspace);
+            this.resetWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.reset_mmsl_workspace);
             // 
             // resetConfigToolStripMenuItem
             // 
@@ -191,10 +192,18 @@
             this.resetConfigToolStripMenuItem.Text = "Reset Config";
             this.resetConfigToolStripMenuItem.Click += new System.EventHandler(this.reset_config);
             // 
+            // resetAllToolStripMenuItem
+            // 
+            this.resetAllToolStripMenuItem.Name = "resetAllToolStripMenuItem";
+            this.resetAllToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.resetAllToolStripMenuItem.Text = "Reset All";
+            this.resetAllToolStripMenuItem.Click += new System.EventHandler(this.reset_all);
+            // 
             // smashExplorerInterfaceToolStripMenuItem
             // 
             this.smashExplorerInterfaceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.importSmashExplorerWorkspaceToolStripMenuItem});
+            this.importSmashExplorerWorkspaceToolStripMenuItem,
+            this.exportSmashExplorerWorkpaceToolStripMenuItem});
             this.smashExplorerInterfaceToolStripMenuItem.Name = "smashExplorerInterfaceToolStripMenuItem";
             this.smashExplorerInterfaceToolStripMenuItem.Size = new System.Drawing.Size(145, 20);
             this.smashExplorerInterfaceToolStripMenuItem.Text = "SmashExplorer Interface";
@@ -255,6 +264,16 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Skin Information";
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(161, 221);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(125, 23);
+            this.button5.TabIndex = 9;
+            this.button5.Text = "Package Meteor Skin";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.package_meteor);
             // 
             // button3
             // 
@@ -632,22 +651,12 @@
             this.label6.TabIndex = 15;
             this.label6.Text = "Meteor Skin Drop Zone";
             // 
-            // resetAllToolStripMenuItem
+            // exportSmashExplorerWorkpaceToolStripMenuItem
             // 
-            this.resetAllToolStripMenuItem.Name = "resetAllToolStripMenuItem";
-            this.resetAllToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.resetAllToolStripMenuItem.Text = "Reset All";
-            this.resetAllToolStripMenuItem.Click += new System.EventHandler(this.reset_all);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(161, 221);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(125, 23);
-            this.button5.TabIndex = 9;
-            this.button5.Text = "Package Meteor Skin";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.package_meteor);
+            this.exportSmashExplorerWorkpaceToolStripMenuItem.Name = "exportSmashExplorerWorkpaceToolStripMenuItem";
+            this.exportSmashExplorerWorkpaceToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.exportSmashExplorerWorkpaceToolStripMenuItem.Text = "Export SmashExplorer workpace";
+            this.exportSmashExplorerWorkpaceToolStripMenuItem.Click += new System.EventHandler(this.launch_se_export);
             // 
             // main
             // 
@@ -750,6 +759,7 @@
         private System.Windows.Forms.ToolStripMenuItem importSmashExplorerWorkspaceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetAllToolStripMenuItem;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.ToolStripMenuItem exportSmashExplorerWorkpaceToolStripMenuItem;
     }
 }
 

@@ -18,13 +18,13 @@ namespace MeteorSkinLibrary
         //Variables
         #region Handlers
         LibraryHandler Library;
-        PropertyHandler properties = new PropertyHandler("config/Default_Config.xml");
-        MetaHandler meta = new MetaHandler("config/meta/Default_Meta.xml");
+        PropertyHandler properties = new PropertyHandler("mmsl_config/Default_Config.xml");
+        MetaHandler meta = new MetaHandler("mmsl_config/meta/Default_Meta.xml");
         #endregion
         #region SelectedInfo
         //Name in the list
         String selected_char_name;
-        //workspace folder name
+        //mmsl_workspace folder name
         String selected_char_folder;
         //Two digit representation of skin slot
         String selected_skin_slot_model;
@@ -58,31 +58,31 @@ namespace MeteorSkinLibrary
         {
             InitializeComponent();
             //Checks Default_Library.xml presence
-            if (!File.Exists("config/Default_Library.xml"))
+            if (!File.Exists("mmsl_config/Default_Library.xml"))
             {
-                console_write("Default Library not found, please add Default_Library.xml in the /config folder.");
+                console_write("Default Library not found, please add Default_Library.xml in the /mmsl_config folder.");
             }
-            if (!File.Exists("config/Default_Config.xml"))
+            if (!File.Exists("mmsl_config/Default_Config.xml"))
             {
-                console_write("Default Config not found, please add Default_Config.xml in the /config folder.");
+                console_write("Default Config not found, please add Default_Config.xml in the /mmsl_config folder.");
             }
             else
             {
                 //Checks Config.xml presence, if not creates one based on Default_Config.xml
-                if (!File.Exists("config/Config.xml"))
+                if (!File.Exists("mmsl_config/Config.xml"))
                 {
                     console_write("Creating Config");
-                    File.Copy(properties.get("default_config"), "config/Config.xml");
+                    File.Copy(properties.get("default_config"), "mmsl_config/Config.xml");
                 }
-                properties.set_library_path("config/Config.xml");
-                properties.add("current_library", "config/Library.xml");
-                console_write("Config loaded : config/Config.xml");
+                properties.set_library_path("mmsl_config/Config.xml");
+                properties.add("current_library", "mmsl_config/Library.xml");
+                console_write("Config loaded : mmsl_config/Config.xml");
 
                 //Checks Library.xml presence, if not creates one based on Default_Library.xml
-                if (!File.Exists("config/Library.xml"))
+                if (!File.Exists("mmsl_config/Library.xml"))
                 {
                     console_write("Creating Library");
-                    File.Copy(properties.get("default_library"), "config/Library.xml");
+                    File.Copy(properties.get("default_library"), "mmsl_config/Library.xml");
                 }
 
 
@@ -105,10 +105,10 @@ namespace MeteorSkinLibrary
         {
             Application.Exit();
         }
-        //Open Workspace Function
-        private void openWorkspace(object sender, EventArgs e)
+        //Open mmsl_workspace Function
+        private void openmmsl_workspace(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("workspace");
+            System.Diagnostics.Process.Start("mmsl_workspace");
         }
         #endregion
         #region SkinMenu
@@ -134,10 +134,10 @@ namespace MeteorSkinLibrary
         //Menu Reset Library
         private void menu_reset_library(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Doing this will erase all entries in the Library. Skins are still present in the workspace folder. Continue with this destruction?", "Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Doing this will erase all entries in the Library. Skins are still present in the mmsl_workspace folder. Continue with this destruction?", "Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                File.Delete("config/Library.xml");
-                File.Copy("config/Default_Library.xml", "config/Library.xml");
+                File.Delete("mmsl_config/Library.xml");
+                File.Copy("mmsl_config/Default_Library.xml", "mmsl_config/Library.xml");
 
                 state_check();
                 skin_ListBox_reload();
@@ -145,14 +145,14 @@ namespace MeteorSkinLibrary
             }
 
         }
-        //Workspace reset button
-        private void reset_workspace(object sender, EventArgs e)
+        //mmsl_workspace reset button
+        private void reset_mmsl_workspace(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Doing this will erase all contents of the workspace folder which contains every file you've added. Continue with this destruction?", "Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Doing this will erase all contents of the mmsl_workspace folder which contains every file you've added. Continue with this destruction?", "Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                batch_delete("workspace");
-                Directory.CreateDirectory("workspace");
-                console_write("Workspace reset complete");
+                batch_delete("mmsl_workspace");
+                Directory.CreateDirectory("mmsl_workspace");
+                console_write("mmsl_workspace reset complete");
             }
             state_check();
         }
@@ -161,8 +161,8 @@ namespace MeteorSkinLibrary
         {
             if (MessageBox.Show("Doing this will erase all configuration changes. Continue with this destruction?", "Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                File.Delete("config/Config.xml");
-                File.Copy("config/Default_Config.xml", "config/Config.xml");
+                File.Delete("mmsl_config/Config.xml");
+                File.Copy("mmsl_config/Default_Config.xml", "mmsl_config/Config.xml");
 
                 state_check();
                 console_write("Config reset complete");
@@ -173,33 +173,33 @@ namespace MeteorSkinLibrary
         {
             if (MessageBox.Show("Doing this will erase all configuration changes. It will erase all files of every mod you've added. The library containing skin information will be deleted. Continue with this Supermassive black-hole type destruction?", "Super Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                File.Delete("config/Config.xml");
-                File.Copy("config/Default_Config.xml", "config/Config.xml");
+                File.Delete("mmsl_config/Config.xml");
+                File.Copy("mmsl_config/Default_Config.xml", "mmsl_config/Config.xml");
 
                 console_write("Config reset complete");
 
-                if (Directory.Exists("workspace"))
+                if (Directory.Exists("mmsl_workspace"))
                 {
-                    String[] files = Directory.GetFiles("workspace", "*", SearchOption.AllDirectories);
+                    String[] files = Directory.GetFiles("mmsl_workspace", "*", SearchOption.AllDirectories);
                     foreach (String file in files)
                     {
                         File.Delete(file);
                     }
-                    Directory.Delete("workspace", true);
-                    Directory.CreateDirectory("workspace");
+                    Directory.Delete("mmsl_workspace", true);
+                    Directory.CreateDirectory("mmsl_workspace");
                 }
                 else
                 {
-                    Directory.CreateDirectory("workspace");
+                    Directory.CreateDirectory("mmsl_workspace");
                 }
-                if (!Directory.Exists("workspace"))
+                if (!Directory.Exists("mmsl_workspace"))
                 {
-                    Directory.CreateDirectory("workspace");
+                    Directory.CreateDirectory("mmsl_workspace");
                 }
-                console_write("Workspace reset complete");
+                console_write("mmsl_workspace reset complete");
 
-                File.Delete("config/Library.xml");
-                File.Copy("config/Default_Library.xml", "config/Library.xml");
+                File.Delete("mmsl_config/Library.xml");
+                File.Copy("mmsl_config/Default_Library.xml", "mmsl_config/Library.xml");
 
                 console_write("Library reset complete");
                 skin_ListBox_reload();
@@ -211,28 +211,28 @@ namespace MeteorSkinLibrary
         {
             if (MessageBox.Show("Doing this will erase all configuration changes. It will erase all files of every mod you've added. The library containing skin information will be deleted. Continue with this Supermassive black-hole type destruction?", "Super Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                if (Directory.Exists("workspace"))
+                if (Directory.Exists("mmsl_workspace"))
                 {
-                    String[] files = Directory.GetFiles("workspace", "*", SearchOption.AllDirectories);
+                    String[] files = Directory.GetFiles("mmsl_workspace", "*", SearchOption.AllDirectories);
                     foreach (String file in files)
                     {
                         File.Delete(file);
                     }
-                    Directory.Delete("workspace", true);
-                    Directory.CreateDirectory("workspace");
+                    Directory.Delete("mmsl_workspace", true);
+                    Directory.CreateDirectory("mmsl_workspace");
                 }
                 else
                 {
-                    Directory.CreateDirectory("workspace");
+                    Directory.CreateDirectory("mmsl_workspace");
                 }
-                if (!Directory.Exists("workspace"))
+                if (!Directory.Exists("mmsl_workspace"))
                 {
-                    Directory.CreateDirectory("workspace");
+                    Directory.CreateDirectory("mmsl_workspace");
                 }
-                console_write("Workspace reset complete");
+                console_write("mmsl_workspace reset complete");
 
-                File.Delete("config/Library.xml");
-                File.Copy("config/Default_Library.xml", "config/Library.xml");
+                File.Delete("mmsl_config/Library.xml");
+                File.Copy("mmsl_config/Default_Library.xml", "mmsl_config/Library.xml");
 
                 console_write("Library reset complete");
                 skin_ListBox_reload();
@@ -245,6 +245,33 @@ namespace MeteorSkinLibrary
         {
             batch_import_SE();
         }
+        private void launch_se_export(object sender, EventArgs e)
+        {
+            console_write("Exporting mods to Smash Explorer workspace");
+            console_write("This may take a while...");
+            if (Directory.Exists("mmsl_workspace/data"))
+            {
+                String destination = properties.get("explorer_workspace") + "/content/patch/data";
+                String source = "mmsl_workspace/data";
+                if (Directory.Exists(destination)){
+                    if (Directory.Exists(destination + "/fighter")){
+                        Directory.Delete(destination + "/fighter", true);
+                    }
+                    if (Directory.Exists(destination + "/ui"))
+                    {
+                        Directory.Delete(destination + "/ui", true);
+                    }
+
+                    foreach (string dirPath in Directory.GetDirectories(source, "*",SearchOption.AllDirectories))
+                        Directory.CreateDirectory(dirPath.Replace(source, destination));
+
+                    //Copy all the files & Replaces any files with the same name
+                    foreach (string newPath in Directory.GetFiles(source, "*.*",SearchOption.AllDirectories))
+                    File.Copy(newPath, newPath.Replace(source, destination), true);
+                }
+            }
+            console_write("Done.");
+        }
         #endregion
         #endregion
 
@@ -256,16 +283,16 @@ namespace MeteorSkinLibrary
             this.selected_char_name = CharacterList.SelectedItem.ToString();
             this.selected_char_folder = Library.get_folder_name(this.selected_char_name);
 
-            this.model_destination = "workspace/data/fighter/" + this.selected_char_folder + "/model/";
-            this.meta_destination = "config/meta/" + this.selected_char_folder + "/";
+            this.model_destination = "mmsl_workspace/data/fighter/" + this.selected_char_folder + "/model/";
+            this.meta_destination = "mmsl_config/meta/" + this.selected_char_folder + "/";
 
             if (Library.get_dlc_status(selected_char_name) == "yes")
             {
-                this.csp_destination = "workspace/data/ui/replace/append/chr/";
+                this.csp_destination = "mmsl_workspace/data/ui/replace/append/chr/";
             }
             else
             {
-                this.csp_destination = "workspace/data/ui/replace/chr/";
+                this.csp_destination = "mmsl_workspace/data/ui/replace/chr/";
             }
             state_check();
             skin_ListBox_reload();
@@ -301,7 +328,7 @@ namespace MeteorSkinLibrary
             {
                 Library.clean_skin(this.selected_char_name, index);
                 skin_ListBox_reload();
-                console_write("Deleted slot " + index);
+                console_write("Cleaned slot " + index);
             }
             else
             {
@@ -309,8 +336,8 @@ namespace MeteorSkinLibrary
                 skin_ListBox_reload();
                 console_write("Deleted slot " + index);
             }
-            String filter = ""+this.selected_skin_slot;
-            String[] modeldirectories = Directory.GetDirectories("workspace/data/fighter/" + this.selected_char_folder + "/model/", filter, SearchOption.AllDirectories);
+            String filter = "*"+this.selected_skin_slot;
+            String[] modeldirectories = Directory.GetDirectories("mmsl_workspace/data/fighter/" + this.selected_char_folder + "/model/", filter, SearchOption.AllDirectories);
             if (modeldirectories.Length > 0)
             {
                 foreach(String dir in modeldirectories)
@@ -321,7 +348,7 @@ namespace MeteorSkinLibrary
             }
 
 
-            String csppath = "workspace/data/ui/replace/" + dlc + "chr/ ";
+            String csppath = "mmsl_workspace/data/ui/replace/" + dlc + "chr/ ";
             if (!Directory.Exists(csppath))
             {
                 Directory.CreateDirectory(csppath);
@@ -353,10 +380,10 @@ namespace MeteorSkinLibrary
             skin_ListBox_reload();
             console_write("Cleaned slot " + index);
 
-            String filter = "" + this.selected_skin_slot;
-            if(Directory.Exists("workspace/data/fighter/" + this.selected_char_folder + "/model/"))
+            String filter = "*" + this.selected_skin_slot;
+            if(Directory.Exists("mmsl_workspace/data/fighter/" + this.selected_char_folder + "/model/"))
             {
-                String[] modeldirectories = Directory.GetDirectories("workspace/data/fighter/" + this.selected_char_folder + "/model/", filter, SearchOption.AllDirectories);
+                String[] modeldirectories = Directory.GetDirectories("mmsl_workspace/data/fighter/" + this.selected_char_folder + "/model/", filter, SearchOption.AllDirectories);
                 if (modeldirectories.Length > 0)
                 {
                     foreach (String dir in modeldirectories)
@@ -369,7 +396,7 @@ namespace MeteorSkinLibrary
             }
 
 
-            String csppath = "workspace/data/ui/replace/" + dlc + "chr/ ";
+            String csppath = "mmsl_workspace/data/ui/replace/" + dlc + "chr/ ";
             if (!Directory.Exists(csppath))
             {
                 Directory.CreateDirectory(csppath);
@@ -394,7 +421,7 @@ namespace MeteorSkinLibrary
 
             String skin_name = textBox3.Text;
             String package_name = "meteor_xx_" + skin_name + "/";
-            String package_destination = "packages/" + package_name;
+            String package_destination = "mmsl_packages/" + package_name;
             String csp_slot = (this.selected_skin_slot + 1) <10 ? "0"+ (this.selected_skin_slot + 1).ToString() : (this.selected_skin_slot + 1).ToString();
             String model_slot = (this.selected_skin_slot) < 10 ? "0" + (this.selected_skin_slot).ToString() : (this.selected_skin_slot).ToString();
 
@@ -431,7 +458,7 @@ namespace MeteorSkinLibrary
                         if (Directory.GetDirectories(model_folders).Length > 0)
                         {
                             //cXX n stuff
-                            foreach (String model in Directory.GetDirectories(model_folders))
+                            foreach (String model in Directory.GetDirectories(model_folders,"*"+ model_slot))
                             {
                                 if(Directory.GetFiles(model).Length > 0)
                                 {
@@ -532,7 +559,7 @@ namespace MeteorSkinLibrary
         //When a csp is deleted
         private void remove_selected_csp_Click(object sender, EventArgs e)
         {
-            String file_path = "workspace/data/ui/replace/" + dlc + "chr/" + this.selected_skin_csp_name + "/" + this.selected_skin_csp_name + "_" + this.selected_char_folder + "_" + this.selected_skin_slot_csp + ".nut";
+            String file_path = "mmsl_workspace/data/ui/replace/" + dlc + "chr/" + this.selected_skin_csp_name + "/" + this.selected_skin_csp_name + "_" + this.selected_char_folder + "_" + this.selected_skin_slot_csp + ".nut";
             File.Delete(file_path);
             Library.delete_skin_csp(selected_char_name, int.Parse(selected_skin_slot_csp), this.selected_skin_csp_name);
             skin_details_reload();
@@ -626,7 +653,7 @@ namespace MeteorSkinLibrary
         private void metadata_reload()
         {
             String meta_slot_path = this.meta_destination + "slot_" + (this.selected_skin_slot + 1);
-            PropertyHandler properties = new PropertyHandler("config/Config.xml");
+            PropertyHandler properties = new PropertyHandler("mmsl_config/Config.xml");
 
             //Reset boxes
             textBox1.Text = "";
@@ -745,8 +772,8 @@ namespace MeteorSkinLibrary
         private void batch_copy_model(String[] folderlist, int i_slot, String char_folder_name)
         {
 
-            //defines model default location in workspace, /fighter/model/
-            String model_dest = "workspace/data/fighter/" + Library.get_folder_name(char_folder_name) + "/model/";
+            //defines model default location in mmsl_workspace, /fighter/model/
+            String model_dest = "mmsl_workspace/data/fighter/" + Library.get_folder_name(char_folder_name) + "/model/";
 
             foreach (String folder in folderlist)
             {
@@ -966,7 +993,7 @@ namespace MeteorSkinLibrary
         //Used to move a CSP file to the correct location
         private void copyCSP(String FilePath, String Filetype, String slot)
         {
-            String destination = "workspace/data/ui/replace/" + dlc + "chr/" + Filetype + "/";
+            String destination = "mmsl_workspace/data/ui/replace/" + dlc + "chr/" + Filetype + "/";
             Console.WriteLine(destination);
 
             String character_folder = this.selected_char_folder;
@@ -985,7 +1012,7 @@ namespace MeteorSkinLibrary
         //Used when copying a csp to a specific character
         private void copyCSP(String FilePath, String Filetype, String slot, String folder, String char_name)
         {
-            String destination = "workspace/data/ui/replace/" + dlc + "chr/" + Filetype + "/";
+            String destination = "mmsl_workspace/data/ui/replace/" + dlc + "chr/" + Filetype + "/";
             Console.WriteLine(destination);
 
             String character_folder = folder;
@@ -1004,13 +1031,13 @@ namespace MeteorSkinLibrary
         private void copyCSP2(String FilePath, String Filetype, String slot,String char_name)
         {
 
-            String destination = "workspace/data/ui/replace/chr/" + Filetype + "/";
+            String destination = "mmsl_workspace/data/ui/replace/chr/" + Filetype + "/";
             Console.WriteLine(destination);
 
             String character_folder = Path.GetFileName(FilePath).Split('_')[2];
             if(Library.get_dlc_status(char_name) == "yes")
             {
-                destination = "workspace/data/ui/replace/append/chr/" + Filetype + "/";
+                destination = "mmsl_workspace/data/ui/replace/append/chr/" + Filetype + "/";
             }
 
             String final_file_name = Filetype + "_" + character_folder + "_" + slot + ".nut";
@@ -1029,28 +1056,28 @@ namespace MeteorSkinLibrary
         {
 
         }
-        //Used to import SmashExplorer workspace into Library
+        //Used to import SmashExplorer mmsl_workspace into Library
         private void batch_import_SE()
         {
             //Reseting all to avoid conflicts
             reset_all();
             //Setting SE paths
-            String se_workspace_path = properties.get("explorer_workspace");
-            String se_model_path = se_workspace_path + "/content/patch/data/fighter/";
-            String se_csp_path = se_workspace_path + "/content/patch/data/ui/replace/chr/";
-            String se_csp_path_dlc = se_workspace_path + "/content/patch/data/ui/replace/append/chr/";
+            String se_mmsl_workspace_path = properties.get("explorer_workspace");
+            String se_model_path = se_mmsl_workspace_path + "/content/patch/data/fighter/";
+            String se_csp_path = se_mmsl_workspace_path + "/content/patch/data/ui/replace/chr/";
+            String se_csp_path_dlc = se_mmsl_workspace_path + "/content/patch/data/ui/replace/append/chr/";
 
             //Setting destinations
-            String mmsl_workspace_path = "workspace";
-            String mmsl_model_path = "workspace/data/fighter/";
-            String mmsl_csp_path = "workspace" + "/data/ui/replace/";
+            String mmsl_mmsl_workspace_path = "mmsl_workspace";
+            String mmsl_model_path = "mmsl_workspace/data/fighter/";
+            String mmsl_csp_path = "mmsl_workspace" + "/data/ui/replace/";
 
             //Setting slot numbers
             String slot_model = (SkinListBox.Items.Count +1).ToString();
             String slot_csp = "";
 
-            //Workspace folder check
-            if (Directory.Exists(se_workspace_path))
+            //mmsl_workspace folder check
+            if (Directory.Exists(se_mmsl_workspace_path))
             {
                 #region ModelImporting
                 //characters folder check
@@ -1066,7 +1093,7 @@ namespace MeteorSkinLibrary
                             //Checking model folder
                             if (Directory.Exists(character + "/model"))
                             {
-                                mmsl_model_path = "workspace/data/fighter/" + Path.GetFileName(character) + "/model/";
+                                mmsl_model_path = "mmsl_workspace/data/fighter/" + Path.GetFileName(character) + "/model/";
                                 console_write("Detected character: " + Library.get_skin_character_name(Path.GetFileName(character)));
                                 for (int i = 0; i < 256; i++)
                                 {
@@ -1202,7 +1229,7 @@ namespace MeteorSkinLibrary
 
             }
         }
-        //Used to import file info and skins from workspace into Library
+        //Used to import file info and skins from mmsl_workspace into Library
         private void batch_detect_Library()
         {
 
@@ -1345,6 +1372,7 @@ namespace MeteorSkinLibrary
 
         #endregion
 
+        
     }
 
 

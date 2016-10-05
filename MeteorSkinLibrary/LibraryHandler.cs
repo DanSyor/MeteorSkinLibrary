@@ -12,7 +12,7 @@ namespace MeteorSkinLibrary
     class LibraryHandler
     {
         //Library path
-        String LibraryPath = "config/Library.xml";
+        String LibraryPath = "mmsl_config/Library.xml";
 
         public LibraryHandler(String custom_Library_path)
         {
