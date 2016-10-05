@@ -247,29 +247,35 @@ namespace MeteorSkinLibrary
         }
         private void launch_se_export(object sender, EventArgs e)
         {
-            console_write("Exporting mods to Smash Explorer workspace");
-            console_write("This may take a while...");
-            if (Directory.Exists("mmsl_workspace/data"))
+            if (MessageBox.Show("Doing this will erase fighter and ui folders from Smash Explorer's workspace. Are you sure you've made a backup? If yes, you can validate these changes", "Super Segtendo WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                String destination = properties.get("explorer_workspace") + "/content/patch/data";
-                String source = "mmsl_workspace/data";
-                if (Directory.Exists(destination)){
-                    if (Directory.Exists(destination + "/fighter")){
-                        Directory.Delete(destination + "/fighter", true);
-                    }
-                    if (Directory.Exists(destination + "/ui"))
+                console_write("Exporting mods to Smash Explorer workspace");
+                console_write("This may take a while...");
+                if (Directory.Exists("mmsl_workspace/data"))
+                {
+                    String destination = properties.get("explorer_workspace") + "/content/patch/data";
+                    String source = "mmsl_workspace/data";
+                    if (Directory.Exists(destination))
                     {
-                        Directory.Delete(destination + "/ui", true);
+                        if (Directory.Exists(destination + "/fighter"))
+                        {
+                            Directory.Delete(destination + "/fighter", true);
+                        }
+                        if (Directory.Exists(destination + "/ui"))
+                        {
+                            Directory.Delete(destination + "/ui", true);
+                        }
+
+                        foreach (string dirPath in Directory.GetDirectories(source, "*", SearchOption.AllDirectories))
+                            Directory.CreateDirectory(dirPath.Replace(source, destination));
+
+                        //Copy all the files & Replaces any files with the same name
+                        foreach (string newPath in Directory.GetFiles(source, "*.*", SearchOption.AllDirectories))
+                            File.Copy(newPath, newPath.Replace(source, destination), true);
                     }
-
-                    foreach (string dirPath in Directory.GetDirectories(source, "*",SearchOption.AllDirectories))
-                        Directory.CreateDirectory(dirPath.Replace(source, destination));
-
-                    //Copy all the files & Replaces any files with the same name
-                    foreach (string newPath in Directory.GetFiles(source, "*.*",SearchOption.AllDirectories))
-                    File.Copy(newPath, newPath.Replace(source, destination), true);
                 }
             }
+                
             console_write("Done.");
         }
         #endregion
@@ -447,7 +453,6 @@ namespace MeteorSkinLibrary
 
             if (Directory.Exists(model_source))
             {
-                
                 String[] folders = Directory.GetDirectories(model_source);
                 // /model/ directory
                 if(folders.Length > 0)
@@ -777,60 +782,65 @@ namespace MeteorSkinLibrary
 
             foreach (String folder in folderlist)
             {
-                // Base folder level
-                //It means, folders are inside
-                if (Path.GetFileName(folder) == "model")
+                if (Library.check_character_foldername(char_folder_name))
                 {
-                    // Model folder level
-                    //Getting directories inside
-                    String[] model_folders = Directory.GetDirectories(folder);
-                    //Checking folder presence
-                    if (model_folders.Length > 0)
+                    // Base folder level
+                    //It means, folders are inside
+                    if (Path.GetFileName(folder) == "model")
                     {
-                        foreach(String folder2 in model_folders)
+                        // Model folder level
+                        //Getting directories inside
+                        String[] model_folders = Directory.GetDirectories(folder);
+                        //Checking folder presence
+                        if (model_folders.Length > 0)
                         {
-                            //body others level
-                            
-                            String[] body_folders = Directory.GetDirectories(folder2);
-                            foreach (String folder3 in body_folders)
+                            foreach (String folder2 in model_folders)
+                            {
+                                //body others level
+
+                                String[] body_folders = Directory.GetDirectories(folder2);
+                                foreach (String folder3 in body_folders)
+                                {
+                                    //cXX / lXX level
+                                    if (Directory.GetFiles(folder3).Length > 0)
+                                    {
+                                        Console.WriteLine(folder3);
+                                        copyModel(folder3, i_slot.ToString(), Path.GetFileName(folder2), Path.GetFileName(folder3), char_folder_name, model_dest);
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                    //body others level
+                    //moving a folder that's inside model
+                    else
+                    {
+                        String[] body_folders = Directory.GetDirectories(folder);
+                        if (Directory.GetFiles(folder).Length == 0)
+                        {
+                            foreach (String folder2 in body_folders)
                             {
                                 //cXX / lXX level
-                                if (Directory.GetFiles(folder3).Length > 0)
+                                if (Directory.GetFiles(folder2).Length > 0)
                                 {
-                                    Console.WriteLine(folder3);
-                                    copyModel(folder3, i_slot.ToString(), Path.GetFileName(folder2), Path.GetFileName(folder3),char_folder_name,model_dest);        
+                                    Console.WriteLine(folder2);
+                                    copyModel(folder2, i_slot.ToString(), Path.GetFileName(folder), Path.GetFileName(folder2), char_folder_name, model_dest);
                                 }
-                                
-                            }
-                        }
-                    }
-                }
-                //body others level
-                //moving a folder that's inside model
-                else
-                {
-                    String[] body_folders = Directory.GetDirectories(folder);
-                    if(Directory.GetFiles(folder).Length == 0)
-                    {
-                        foreach (String folder2 in body_folders)
-                        {
-                            //cXX / lXX level
-                            if (Directory.GetFiles(folder2).Length > 0)
-                            {
-                                Console.WriteLine(folder2);
-                                copyModel(folder2, i_slot.ToString(), Path.GetFileName(folder), Path.GetFileName(folder2), char_folder_name, model_dest);
-                            }
 
+                            }
                         }
-                    }else
-                    {
-                        Regex clXX = new Regex("^[cl]([0-9]{2}|xx)$",RegexOptions.IgnoreCase);
-                        if (clXX.IsMatch(Path.GetFileName(folder)))
+                        else
                         {
-                            copyModel(folder, i_slot.ToString(), "body", Path.GetFileName(folder), char_folder_name, model_dest);
+                            Regex clXX = new Regex("^[cl]([0-9]{2}|xx)$", RegexOptions.IgnoreCase);
+                            if (clXX.IsMatch(Path.GetFileName(folder)))
+                            {
+                                copyModel(folder, i_slot.ToString(), "body", Path.GetFileName(folder), char_folder_name, model_dest);
+                            }
                         }
                     }
                 }
+                
             }
             skin_details_reload();
 
