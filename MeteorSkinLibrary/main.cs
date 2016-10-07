@@ -57,6 +57,7 @@ namespace MeteorSkinLibrary
         public main()
         {
             InitializeComponent();
+
             //Checks Default_Library.xml presence
             if (!File.Exists("mmsl_config/Default_Library.xml"))
             {
@@ -349,7 +350,6 @@ namespace MeteorSkinLibrary
                 foreach(String dir in modeldirectories)
                 {
                     Directory.Delete(dir, true);
-                    Console.WriteLine(dir);
                 }
             }
 
@@ -364,7 +364,6 @@ namespace MeteorSkinLibrary
             {
                 foreach (String file in files)
                 {
-                    Console.WriteLine(file);
                     File.Delete(file);
                 }
             }
@@ -395,7 +394,6 @@ namespace MeteorSkinLibrary
                     foreach (String dir in modeldirectories)
                     {
                         Directory.Delete(dir, true);
-                        Console.WriteLine(dir);
                     }
                 }
 
@@ -412,7 +410,6 @@ namespace MeteorSkinLibrary
             {
                 foreach (String file in files)
                 {
-                    Console.WriteLine(file);
                     File.Delete(file);
                 }
             }
@@ -467,7 +464,6 @@ namespace MeteorSkinLibrary
                             {
                                 if(Directory.GetFiles(model).Length > 0)
                                 {
-                                    Console.WriteLine(model_dest + Path.GetFileName(model_folders) + "/" + Path.GetFileName(model));
                                     if (Directory.Exists(model_dest + Path.GetFileName(model_folders) + "/" + Path.GetFileName(model)))
                                     {
                                         Directory.Delete(model_dest + Path.GetFileName(model_folders) + "/" + Path.GetFileName(model), true);
@@ -494,7 +490,6 @@ namespace MeteorSkinLibrary
                     {
                         console_write("Adding " + Path.GetFileName(csp) + " to the package");
                         String csp_folder = Path.GetFileName(csp).Split('_')[0] + "_" + Path.GetFileName(csp).Split('_')[1];
-                        Console.WriteLine(csp_dest + csp_folder + "/" + Path.GetFileName(csp));
                         if (!Directory.Exists(csp_dest + csp_folder))
                         {
                             Directory.CreateDirectory(csp_dest + csp_folder);
@@ -538,7 +533,6 @@ namespace MeteorSkinLibrary
             }
             folder += this.selected_skin_slot_model;
 
-            Console.WriteLine(folder);
             if (Directory.Exists(folder))
             {
                 Directory.Delete(folder, true);
@@ -721,7 +715,7 @@ namespace MeteorSkinLibrary
         private void model_DragDrop(object sender, DragEventArgs e)
         {
             this.model_folder_list = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-            batch_copy_model(this.model_folder_list, int.Parse(this.selected_skin_slot_model),this.selected_char_name);
+            batch_copy_model(this.model_folder_list, int.Parse(this.selected_skin_slot_model),Library.get_folder_name(this.selected_char_name));
             state_check();
         }
         private void csp_DragEnter2(object sender, DragEventArgs e)
@@ -737,7 +731,7 @@ namespace MeteorSkinLibrary
             if (Directory.Exists(FileList[0]))
             {
                 this.csp_file_list = FileList;
-                batch_copy_csp();
+                batch_copy_csp(FileList,int.Parse(this.selected_skin_slot_csp));
                 state_check();
             }
             else
@@ -778,11 +772,12 @@ namespace MeteorSkinLibrary
         {
 
             //defines model default location in mmsl_workspace, /fighter/model/
-            String model_dest = "mmsl_workspace/data/fighter/" + Library.get_folder_name(char_folder_name) + "/model/";
+            String model_dest = "mmsl_workspace/data/fighter/" + char_folder_name + "/model/";
 
             foreach (String folder in folderlist)
             {
-                if (Library.check_character_foldername(char_folder_name))
+                Console.WriteLine(char_folder_name);
+                if (Library.check_character_foldername(char_folder_name.ToLower()))
                 {
                     // Base folder level
                     //It means, folders are inside
@@ -804,8 +799,7 @@ namespace MeteorSkinLibrary
                                     //cXX / lXX level
                                     if (Directory.GetFiles(folder3).Length > 0)
                                     {
-                                        Console.WriteLine(folder3);
-                                        copyModel(folder3, i_slot.ToString(), Path.GetFileName(folder2), Path.GetFileName(folder3), char_folder_name, model_dest);
+                                        copyModel(folder3, i_slot.ToString(), Path.GetFileName(folder2), Path.GetFileName(folder3), Library.get_skin_character_name(char_folder_name), model_dest);
                                     }
 
                                 }
@@ -824,8 +818,7 @@ namespace MeteorSkinLibrary
                                 //cXX / lXX level
                                 if (Directory.GetFiles(folder2).Length > 0)
                                 {
-                                    Console.WriteLine(folder2);
-                                    copyModel(folder2, i_slot.ToString(), Path.GetFileName(folder), Path.GetFileName(folder2), char_folder_name, model_dest);
+                                    copyModel(folder2, i_slot.ToString(), Path.GetFileName(folder), Path.GetFileName(folder2), Library.get_skin_character_name(char_folder_name), model_dest);
                                 }
 
                             }
@@ -835,7 +828,7 @@ namespace MeteorSkinLibrary
                             Regex clXX = new Regex("^[cl]([0-9]{2}|xx)$", RegexOptions.IgnoreCase);
                             if (clXX.IsMatch(Path.GetFileName(folder)))
                             {
-                                copyModel(folder, i_slot.ToString(), "body", Path.GetFileName(folder), char_folder_name, model_dest);
+                                copyModel(folder, i_slot.ToString(), "body", Path.GetFileName(folder), Library.get_skin_character_name(char_folder_name), model_dest);
                             }
                         }
                     }
@@ -941,7 +934,6 @@ namespace MeteorSkinLibrary
                         }
                         else
                         {
-                            Console.WriteLine("no Meta detected");
                         }
 
                     }
@@ -990,7 +982,6 @@ namespace MeteorSkinLibrary
 
             //Copying files to destination
             String[] origin_files = Directory.GetFiles(path);
-            Console.WriteLine("there");
             foreach(String file in origin_files)
             {
                 File.Copy(file, model_dest+""+folder+ "/"+ slot_folder_name + "/" + Path.GetFileName(file));
@@ -1004,31 +995,27 @@ namespace MeteorSkinLibrary
         private void copyCSP(String FilePath, String Filetype, String slot)
         {
             String destination = "mmsl_workspace/data/ui/replace/" + dlc + "chr/" + Filetype + "/";
-            Console.WriteLine(destination);
 
-            String character_folder = this.selected_char_folder;
-            String final_file_name = Filetype + "_" + char.ToUpper(character_folder[0]) + character_folder.Substring(1) + "_" + slot + ".nut";
+            String character_folder = Path.GetFileName(FilePath).Split('_')[2];
+            String final_file_name = Filetype + "_" + character_folder + "_" + slot + ".nut";
 
-            Console.WriteLine("Copied : " + final_file_name);
             if (!Directory.Exists(this.csp_destination + "/" + Filetype + "/"))
             {
                 Directory.CreateDirectory(this.csp_destination + Filetype + "/");
             }
             String original_filename = Path.GetFileName(FilePath);
             File.Copy(FilePath, this.csp_destination + "/" + Filetype + "/" + final_file_name, true);
-            Library.add_skin_csp(this.selected_char_name, int.Parse(slot), Filetype);
+            Library.add_skin_csp(character_folder, int.Parse(slot), Filetype);
 
         }
         //Used when copying a csp to a specific character
         private void copyCSP(String FilePath, String Filetype, String slot, String folder, String char_name)
         {
             String destination = "mmsl_workspace/data/ui/replace/" + dlc + "chr/" + Filetype + "/";
-            Console.WriteLine(destination);
 
             String character_folder = folder;
             String final_file_name = Filetype + "_" + char.ToUpper(character_folder[0]) + character_folder.Substring(1) + "_" + slot + ".nut";
 
-            Console.WriteLine("Copied : " + final_file_name);
             if (!Directory.Exists(destination))
             {
                 Directory.CreateDirectory(destination);
@@ -1042,7 +1029,6 @@ namespace MeteorSkinLibrary
         {
 
             String destination = "mmsl_workspace/data/ui/replace/chr/" + Filetype + "/";
-            Console.WriteLine(destination);
 
             String character_folder = Path.GetFileName(FilePath).Split('_')[2];
             if(Library.get_dlc_status(char_name) == "yes")
@@ -1052,14 +1038,13 @@ namespace MeteorSkinLibrary
 
             String final_file_name = Filetype + "_" + character_folder + "_" + slot + ".nut";
 
-            Console.WriteLine("Copied : " + final_file_name);
             if (!Directory.Exists(destination))
             {
                 Directory.CreateDirectory(destination);
             }
             String original_filename = Path.GetFileName(FilePath);
             File.Copy(FilePath, destination + final_file_name, true);
-            Library.add_skin_csp(char_name, int.Parse(slot), Filetype);
+            Library.add_skin_csp(character_folder, int.Parse(slot), Filetype);
         }
         //Used to move a slot to the correct location
         private void copySlot()
@@ -1104,28 +1089,31 @@ namespace MeteorSkinLibrary
                             if (Directory.Exists(character + "/model"))
                             {
                                 mmsl_model_path = "mmsl_workspace/data/fighter/" + Path.GetFileName(character) + "/model/";
-                                console_write("Detected character: " + Library.get_skin_character_name(Path.GetFileName(character)));
-                                for (int i = 0; i < 256; i++)
+                                if (Library.check_character_foldername(Path.GetFileName(character)))
                                 {
-                                    String slot = i < 10 ? "0" + i : i.ToString();
-                                    //Checking subfolders
-                                    String[] Directories = Directory.GetDirectories(character + "/model", "*" + slot, SearchOption.AllDirectories);
-                                    if (Directories.Length > 0)
+                                    console_write("Detected character: " + Library.get_skin_character_name(Path.GetFileName(character)));
+                                    for (int i = 0; i < 256; i++)
                                     {
-                                        console_write("Detected model files");
-                                        foreach (String dir in Directories)
+                                        String slot = i < 10 ? "0" + i : i.ToString();
+                                        //Checking subfolders
+                                        String[] Directories = Directory.GetDirectories(character + "/model", "*" + slot, SearchOption.AllDirectories);
+                                        if (Directories.Length > 0)
                                         {
-                                            console_write("Detected: " + Path.GetFileName(Directory.GetParent(dir).FullName) + "/" + Path.GetFileName(dir));
-                                            if (!Library.check_skin(Library.get_skin_character_name(Path.GetFileName(character)), int.Parse(slot) + 1))
+                                            console_write("Detected model files");
+                                            foreach (String dir in Directories)
                                             {
-                                                Library.add_skin(Library.get_skin_character_name(Path.GetFileName(character)), int.Parse(slot) + 1);
+                                                console_write("Detected: " + Path.GetFileName(Directory.GetParent(dir).FullName) + "/" + Path.GetFileName(dir));
+                                                if (!Library.check_skin(Library.get_skin_character_name(Path.GetFileName(character)), int.Parse(slot) + 1))
+                                                {
+                                                    Library.add_skin(Library.get_skin_character_name(Path.GetFileName(character)), int.Parse(slot) + 1);
+                                                }
+                                                copyModel(dir, slot, Path.GetFileName(Directory.GetParent(dir).FullName), Path.GetFileName(dir), Library.get_skin_character_name(Path.GetFileName(character)), mmsl_model_path);
                                             }
-                                            Console.WriteLine(Path.GetFullPath(dir));
-                                            copyModel(dir, slot, Path.GetFileName(Directory.GetParent(dir).FullName), Path.GetFileName(dir), Library.get_skin_character_name(Path.GetFileName(character)), mmsl_model_path);
-                                        }
 
+                                        }
                                     }
                                 }
+                                
 
                             }
                         }
@@ -1134,46 +1122,53 @@ namespace MeteorSkinLibrary
                 }
                 #endregion
                 #region CspImporting
-                if (Directory.Exists(se_csp_path))
-                {
-                    //chr folders
-                     
-                    String[] csps_dlc = Directory.GetDirectories(se_csp_path);
-                    if (csps_dlc.Length > 0)
-                    {
-                        foreach (String cspformat in csps_dlc)
-                        {
-                            //check folder
-                            if(Directory.GetFiles(cspformat).Length > 0)
-                            {
-                                //For all slot values
-                                for(int i = 0; i < 256; i++)
-                                {
-                                    foreach (String csp in Directory.GetFiles(cspformat))
-                                    {
-                                        //got every info for file
-                                        String test = Path.GetFileName(csp);
-                                        String slot = Path.GetFileName(csp).Split('_')[3].Split('.')[0];
-                                        int teste;
-                                        if (int.TryParse(slot,out teste))
-                                        {
-                                            if (int.Parse(slot) == (i + 1))
-                                            {
-                                                String foldername = Path.GetFileName(csp).Split('_')[2].ToLower();
-                                                if (Library.check_character_foldername(foldername))
-                                                {
-                                                    copyCSP2(csp, Path.GetFileName(cspformat), slot, Library.get_skin_character_name(foldername));
-                                                    if (Library.check_skin(Library.get_skin_character_name(foldername), int.Parse(slot)))
-                                                    {
-                                                        Library.add_skin_csp(Library.get_skin_character_name(foldername), int.Parse(slot), Path.GetFileName(cspformat));
-                                                    }
-                                                    else
-                                                    {
-                                                        Library.add_skin(Library.get_skin_character_name(foldername), int.Parse(slot));
-                                                        Library.add_skin_csp(Library.get_skin_character_name(foldername), int.Parse(slot), Path.GetFileName(cspformat));
-                                                    }
 
-                                                    console_write("Detected: " + Path.GetFileName(csp));
+                for(int z = 0; z < 2; z++)
+                {
+                    if(z == 1)
+                    {
+                        se_csp_path = se_csp_path_dlc;
+                    }
+                    if (Directory.Exists(se_csp_path))
+                    {
+                        //chr folders
+
+                        String[] csps = Directory.GetDirectories(se_csp_path);
+                        if (csps.Length > 0)
+                        {
+                            foreach (String cspformat in csps)
+                            {
+                                //check folder
+                                if (Directory.GetFiles(cspformat).Length > 0)
+                                {
+                                    //For all slot values
+                                    for (int i = 0; i < 256; i++)
+                                    {
+                                        foreach (String csp in Directory.GetFiles(cspformat))
+                                        {
+                                            //got every info for file
+                                            String test = Path.GetFileName(csp);
+                                            String slot = Path.GetFileName(csp).Split('_')[3].Split('.')[0];
+                                            int teste;
+
+                                            if (int.TryParse(slot, out teste))
+                                            {
+                                                //Same slot
+                                                if (int.Parse(slot) == (i + 1))
+                                                {
+                                                    //Gettin foldername
+                                                    String foldername = Path.GetFileName(csp).Split('_')[2];
+                                                        if (Library.check_characcter_csp_foldername(foldername))
+                                                        {
+                                                            
+                                                            if (!Library.check_skin(Library.get_skin_character_name_cspfolder(foldername), int.Parse(slot)))
+                                                            {
+
+                                                            Library.add_skin(Library.get_skin_character_name_cspfolder(foldername), int.Parse(slot));
+                                                        }
+                                                        copyCSP2(csp, Path.GetFileName(cspformat), slot, Library.get_skin_character_name_cspfolder(foldername));
+                                                        console_write("Detected: " + Path.GetFileName(csp));
+                                                        }
                                                 }
                                             }
                                         }
@@ -1181,57 +1176,10 @@ namespace MeteorSkinLibrary
                                 }
                             }
                         }
-                    }
-                    
-                }
-                #endregion
-                #region DlcCspImporting
-                //chr folders
 
-                String[] csps = Directory.GetDirectories(se_csp_path_dlc);
-                if (csps.Length > 0)
-                {
-                    foreach (String cspformat in csps)
-                    {
-                        //check folder
-                        if (Directory.GetFiles(cspformat).Length > 0)
-                        {
-                            //For all slot values
-                            for (int i = 0; i < 256; i++)
-                            {
-                                foreach (String csp in Directory.GetFiles(cspformat))
-                                {
-                                    //got every info for file
-                                    String test = Path.GetFileName(csp);
-                                    String slot = Path.GetFileName(csp).Split('_')[3].Split('.')[0];
-                                    int teste;
-                                    if (int.TryParse(slot, out teste))
-                                    {
-                                        if (int.Parse(slot) == (i + 1))
-                                        {
-                                            String foldername = Path.GetFileName(csp).Split('_')[2].ToLower();
-                                            if (Library.check_character_foldername(foldername))
-                                            {
-                                                copyCSP2(csp, Path.GetFileName(cspformat), slot, Library.get_skin_character_name(foldername));
-                                                if (Library.check_skin(Library.get_skin_character_name(foldername), int.Parse(slot)))
-                                                {
-                                                    Library.add_skin_csp(Library.get_skin_character_name(foldername), int.Parse(slot), Path.GetFileName(cspformat));
-                                                }
-                                                else
-                                                {
-                                                    Library.add_skin(Library.get_skin_character_name(foldername), int.Parse(slot));
-                                                    Library.add_skin_csp(Library.get_skin_character_name(foldername), int.Parse(slot), Path.GetFileName(cspformat));
-                                                }
-
-                                                console_write("Detected: " + Path.GetFileName(csp));
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
+
                 #endregion
             }
             else
