@@ -305,7 +305,7 @@
             this.button1.TabIndex = 6;
             this.button1.Text = "Save Information";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.save_skin_info);
+            this.button1.Click += new System.EventHandler(this.set_skin_libraryname);
             // 
             // SkinOriginText
             // 

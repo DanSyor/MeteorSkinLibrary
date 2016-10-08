@@ -71,6 +71,23 @@ namespace MeteorSkinLibrary
             
             xml.Save(LibraryPath);
         }
+
+        internal Boolean check(string property_name)
+        {
+            Boolean test = false;
+
+            XmlDocument xml = new XmlDocument();
+            xml.Load(LibraryPath);
+            XmlNode properties = xml.SelectSingleNode("/config");
+
+            XmlNode verify = xml.SelectSingleNode("/config/property[attribute::name='" + property_name + "']");
+            if (verify != null)
+            {
+                test = true;
+            }
+
+            return test;
+        }
         #endregion
 
         #region Path

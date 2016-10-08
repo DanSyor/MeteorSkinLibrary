@@ -11,7 +11,10 @@ namespace MeteorSkinLibrary
 {
     class MetaHandler
     {
-        String LibraryPath = "";
+        #region ClassVariables
+            String LibraryPath = "";
+        #endregion
+
         #region Constructors
         //basic
         public MetaHandler()
@@ -26,6 +29,7 @@ namespace MeteorSkinLibrary
         #endregion
 
         #region Properties
+        //gets a property value
         internal String get(string meta_name)
         {
             XmlDocument xml = new XmlDocument();
@@ -33,6 +37,7 @@ namespace MeteorSkinLibrary
             XmlNode property = xml.SelectSingleNode("/metadata/meta[attribute::name='" + meta_name + "']");
             return property.InnerText;
         }
+        //Sets a property value
         internal void set(string meta_name, string property_value)
         {
             XmlDocument xml = new XmlDocument();
@@ -42,6 +47,7 @@ namespace MeteorSkinLibrary
 
             xml.Save(LibraryPath);
         }
+        //Adds a property and it's value
         internal void add(string meta_name, string property_value)
         {
             XmlDocument xml = new XmlDocument();
@@ -77,6 +83,6 @@ namespace MeteorSkinLibrary
         {
             this.LibraryPath = path;
         }
-        #endregion
+        #endregion 
     }
 }

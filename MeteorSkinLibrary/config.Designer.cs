@@ -29,6 +29,18 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox7 = new System.Windows.Forms.CheckBox();
+            this.checkBox6 = new System.Windows.Forms.CheckBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.localisationbox = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.regionbox = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -39,15 +51,150 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBox7);
+            this.groupBox1.Controls.Add(this.checkBox6);
+            this.groupBox1.Controls.Add(this.checkBox5);
+            this.groupBox1.Controls.Add(this.checkBox4);
+            this.groupBox1.Controls.Add(this.checkBox3);
+            this.groupBox1.Controls.Add(this.checkBox2);
+            this.groupBox1.Controls.Add(this.checkBox1);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.localisationbox);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.regionbox);
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(456, 162);
+            this.groupBox1.Size = new System.Drawing.Size(456, 237);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Configuration, yo";
+            // 
+            // checkBox7
+            // 
+            this.checkBox7.AutoSize = true;
+            this.checkBox7.Location = new System.Drawing.Point(303, 180);
+            this.checkBox7.Name = "checkBox7";
+            this.checkBox7.Size = new System.Drawing.Size(74, 17);
+            this.checkBox7.TabIndex = 14;
+            this.checkBox7.Text = "Bayonetta";
+            this.checkBox7.UseVisualStyleBackColor = true;
+            this.checkBox7.CheckedChanged += new System.EventHandler(this.dlc_char_selected);
+            // 
+            // checkBox6
+            // 
+            this.checkBox6.AutoSize = true;
+            this.checkBox6.Location = new System.Drawing.Point(214, 199);
+            this.checkBox6.Name = "checkBox6";
+            this.checkBox6.Size = new System.Drawing.Size(53, 17);
+            this.checkBox6.TabIndex = 13;
+            this.checkBox6.Text = "Corrin";
+            this.checkBox6.UseVisualStyleBackColor = true;
+            this.checkBox6.CheckedChanged += new System.EventHandler(this.dlc_char_selected);
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Location = new System.Drawing.Point(214, 167);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(53, 17);
+            this.checkBox5.TabIndex = 12;
+            this.checkBox5.Text = "Cloud";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            this.checkBox5.CheckedChanged += new System.EventHandler(this.dlc_char_selected);
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(121, 199);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(45, 17);
+            this.checkBox4.TabIndex = 11;
+            this.checkBox4.Text = "Ryu";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.dlc_char_selected);
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Location = new System.Drawing.Point(121, 167);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(45, 17);
+            this.checkBox3.TabIndex = 10;
+            this.checkBox3.Text = "Roy";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.dlc_char_selected);
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(10, 199);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(55, 17);
+            this.checkBox2.TabIndex = 9;
+            this.checkBox2.Text = "Lucas";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.dlc_char_selected);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(10, 167);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(66, 17);
+            this.checkBox1.TabIndex = 8;
+            this.checkBox1.Text = "Mewtwo";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.dlc_char_selected);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(7, 132);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(137, 13);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "CSS DLC Characters fixed?";
+            // 
+            // localisationbox
+            // 
+            this.localisationbox.FormattingEnabled = true;
+            this.localisationbox.Location = new System.Drawing.Point(214, 93);
+            this.localisationbox.Name = "localisationbox";
+            this.localisationbox.Size = new System.Drawing.Size(181, 21);
+            this.localisationbox.TabIndex = 6;
+            this.localisationbox.SelectedIndexChanged += new System.EventHandler(this.localisationbox_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(211, 76);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(74, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Region Select";
+            // 
+            // regionbox
+            // 
+            this.regionbox.FormattingEnabled = true;
+            this.regionbox.Location = new System.Drawing.Point(6, 93);
+            this.regionbox.Name = "regionbox";
+            this.regionbox.Size = new System.Drawing.Size(181, 21);
+            this.regionbox.TabIndex = 4;
+            this.regionbox.SelectedIndexChanged += new System.EventHandler(this.region_selected);
+            this.regionbox.TextChanged += new System.EventHandler(this.region_selected);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 76);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(74, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Region Select";
             // 
             // button1
             // 
@@ -87,10 +234,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 186);
+            this.ClientSize = new System.Drawing.Size(484, 261);
             this.Controls.Add(this.groupBox1);
-            this.MaximumSize = new System.Drawing.Size(500, 225);
-            this.MinimumSize = new System.Drawing.Size(500, 225);
+            this.MaximumSize = new System.Drawing.Size(500, 300);
+            this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "config";
             this.Text = "config";
             this.groupBox1.ResumeLayout(false);
@@ -107,5 +254,17 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ComboBox localisationbox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox regionbox;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox checkBox7;
+        private System.Windows.Forms.CheckBox checkBox6;
+        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }
