@@ -46,6 +46,8 @@ namespace MeteorSkinLibrary
         String csppath;
         String edited_csppath;
         String metapath;
+
+
         
 
         //Handlers
@@ -238,23 +240,34 @@ namespace MeteorSkinLibrary
             String csp_name = Path.GetFileName(csp_path).Split('_')[0] + "_" + Path.GetFileName(csp_path).Split('_')[1];
             this.csps.Add(csp_name);
             Library.add_skin_csp(this.fullname, this.slot, csp_name);
-            if(!Directory.Exists(csppath + csp_name))
-            {
-                Directory.CreateDirectory(csppath + csp_name);
-            }
+            
             if(csp_name == "chr_13")
             {
                 if (Library.get_moved_dlc_status(fullname))
                 {
-                    File.Copy(csp_path, edited_csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
+                    if (!Directory.Exists(edited_csppath + csp_name))
+                    {
+                        Directory.CreateDirectory(edited_csppath + csp_name);
+                        File.Copy(csp_path, edited_csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
+                    }
+                    
                 }else
                 {
-                    File.Copy(csp_path, csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
+                    if (!Directory.Exists(csppath + csp_name))
+                    {
+                        Directory.CreateDirectory(csppath + csp_name);
+                        File.Copy(csp_path, csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
+                    }
+                    
                 }
                 
             }else
             {
-                File.Copy(csp_path, csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
+                if (!Directory.Exists(csppath + csp_name))
+                {
+                    Directory.CreateDirectory(csppath + csp_name);
+                    File.Copy(csp_path, csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
+                }
             }
         }
 
@@ -263,7 +276,14 @@ namespace MeteorSkinLibrary
             String FilePath;
             if(csp_name == "chr_13")
             {
-                FilePath = edited_csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut";
+                if (Library.get_moved_dlc_status(fullname))
+                {
+                    FilePath = edited_csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut";
+                }else
+                {
+                    FilePath = csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut";
+                }
+                
             }else
             {
                 FilePath = csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut";

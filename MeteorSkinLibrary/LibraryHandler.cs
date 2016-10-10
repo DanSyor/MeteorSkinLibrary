@@ -525,6 +525,14 @@ namespace MeteorSkinLibrary
             }
             return test;
         }
+
+        internal String get_ui_char_db_id(String fullname)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.Load(LibraryPath);
+            XmlNode character = xml.SelectSingleNode("/Roaster/Character[attribute::name='" + fullname + "']");
+            return character.Attributes["ui_char_db_id"].Value;
+        }
         #endregion
 
 

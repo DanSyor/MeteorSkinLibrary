@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace MeteorSkinLibrary
 {
@@ -20,10 +21,11 @@ namespace MeteorSkinLibrary
         LibraryHandler Library;
         PropertyHandler properties = new PropertyHandler("mmsl_config/Default_Config.xml");
         MetaHandler meta = new MetaHandler("mmsl_config/meta/Default_Meta.xml");
+        UICharDBHandler uichar;
         #endregion
         #region SelectedInfo
 
-        
+
         //Variables redone
         Skin selected_skin;
 
@@ -32,16 +34,14 @@ namespace MeteorSkinLibrary
         //Lists for soft
         ArrayList Characters = new ArrayList();
         ArrayList Skins = new ArrayList();
+
+        ArrayList ui_char_db_values = new ArrayList();
         #endregion
         #region Files
         //Selected Files
         String[] model_folder_list;
         String[] csp_file_list;
         String[] slot_file_list;
-        //destination
-        String csp_destination;
-        String model_destination;
-        String meta_destination;
         #endregion
 
         public main()
@@ -84,6 +84,14 @@ namespace MeteorSkinLibrary
                 init_character_ListBox();
                 state_check();
                 region_select();
+                uichar = new UICharDBHandler(properties.get("explorer_workspace"), properties.get("datafolder"));
+                if (!uichar.imported)
+                {
+                    console_write("ui_character_db was not found in Sm4sh Explorer, please add it and relaunch this software!");
+                }else
+                {
+                    console_write("ui_character_db was found, congrats !");
+                }
             }
 
         }
@@ -111,6 +119,7 @@ namespace MeteorSkinLibrary
                 Skin newe = new Skin(CharacterList.SelectedItem.ToString(), SkinListBox.Items.Count + 1, "New Skin", "Custom Skin");
                 console_write("Skin added for " + newe.fullname + " in slot " + (SkinListBox.Items.Count + 1));
                 skin_ListBox_reload();
+                uichar.setFile(int.Parse(Library.get_ui_char_db_id(CharacterList.SelectedItem.ToString())), 7, SkinListBox.Items.Count);
                 state_check();
             }else
             {
@@ -125,7 +134,6 @@ namespace MeteorSkinLibrary
         public void menu_config(object sender, EventArgs e)
         {
             config cnf = new config();
-
             cnf.ShowDialog();
             state_check();
         }
@@ -156,7 +164,6 @@ namespace MeteorSkinLibrary
                 Directory.CreateDirectory("mmsl_workspace");
                 console_write("mmsl_workspace reset complete");
             }
-            CharacterList.SelectedIndex = -1;
             SkinListBox.SelectedIndex = -1;
             Characters = Library.get_character_list();
             init_character_ListBox();
@@ -273,6 +280,7 @@ namespace MeteorSkinLibrary
         private void launch_se_import(object sender, EventArgs e)
         {
             batch_import_SE();
+
         }
         private void launch_se_export(object sender, EventArgs e)
         {
@@ -327,6 +335,27 @@ namespace MeteorSkinLibrary
                             //Copy all the files & Replaces any files with the same name
                             foreach (string newPath in Directory.GetFiles(source, "*.*", SearchOption.AllDirectories))
                                 File.Copy(newPath, newPath.Replace(source, destination), true);
+                        }
+                        if(uichar.imported == true)
+                        {
+                            if(properties.get("datafolder") == "data")
+                            {
+                                source = "mmsl_workspace/data(us_en)/param/ui/ui_character_db.bin";
+                            }
+                            else
+                            {
+                                source = "mmsl_workspace/" + properties.get("datafolder") + "/param/ui/ui_character_db.bin";
+                            }
+                            
+                            if(properties.get("datafolder") == "data")
+                            {
+                                destination = properties.get("explorer_workspace") + "/content/patch/data(us_en)";
+                            }else
+                            {
+                                destination = properties.get("explorer_workspace") + "/content/patch/"+ properties.get("datafolder");
+                            }
+                            
+                            File.Copy(source, destination + "/param/ui/ui_character_db.bin",true);
                         }
                     }
                 }
@@ -387,7 +416,7 @@ namespace MeteorSkinLibrary
 
             state_check();
 
-
+            uichar.setFile(int.Parse(Library.get_ui_char_db_id(CharacterList.SelectedItem.ToString())), 7, SkinListBox.Items.Count);
 
         }
 
@@ -477,11 +506,12 @@ namespace MeteorSkinLibrary
         //Reloads Skin Details 
         private void skin_details_reload()
         {
-            getskins(CharacterList.SelectedItem.ToString());
+           
             int slot = SkinListBox.SelectedIndex;
             //emptying lists
             if(slot != -1)
             {
+                getskins(CharacterList.SelectedItem.ToString());
                 this.selected_skin = (Skin)Skins[slot];
                 csps_ListView.Clear();
                 models_ListView.Clear();
@@ -528,13 +558,16 @@ namespace MeteorSkinLibrary
         //Reloads Skin List
         private void skin_ListBox_reload()
         {
+                
+            if(CharacterList.SelectedIndex != -1)
+            {
                 SkinListBox.Items.Clear();
                 getskins(CharacterList.SelectedItem.ToString());
                 foreach (Skin skin in Skins)
                 {
                     SkinListBox.Items.Add("Slot " + skin.slotstring + " - " + skin.libraryname);
                 }
-            
+            }
         }
         //Reloads MetaData
         private void metadata_reload()
@@ -816,10 +849,11 @@ namespace MeteorSkinLibrary
             }
             skin_ListBox_reload();
             SkinListBox.SelectedIndex = (SkinListBox.Items.Count - 1);
+            uichar.setFile(int.Parse(Library.get_ui_char_db_id(CharacterList.SelectedItem.ToString())), 7, SkinListBox.Items.Count);
             skin_details_reload();
         }
         //Used to import SmashExplorer mmsl_workspace into Library
-        private void batch_import_SE()
+        private  void batch_import_SE()
         {
             //Reseting all to avoid conflicts
             reset_all();
@@ -831,6 +865,8 @@ namespace MeteorSkinLibrary
             String se_csp_path_dlc = se_mmsl_workspace_path + "/content/patch/"+datafolder+"/ui/replace/append/chr/";
 
             String slot_model = (SkinListBox.Items.Count +1).ToString();
+            
+
 
             //mmsl_workspace folder check
             if (Directory.Exists(se_mmsl_workspace_path))

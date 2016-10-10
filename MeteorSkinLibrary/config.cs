@@ -15,6 +15,7 @@ namespace MeteorSkinLibrary
     {
         public PropertyHandler properties = new PropertyHandler("mmsl_config/Config.xml");
         public LibraryHandler Library = new LibraryHandler("mmsl_config/Library.xml");
+        public LibraryHandler Default_Library = new LibraryHandler("mmsl_config/Default_Library.xml");
 
         public config()
         {
@@ -42,6 +43,7 @@ namespace MeteorSkinLibrary
                 textBox1.Text = path;
                 textBox1.BackColor = Color.LightGreen;
                 properties.add("explorer_workspace", path);
+                message.Text = "Workspace path saved";
 
             }
             else
@@ -61,41 +63,54 @@ namespace MeteorSkinLibrary
             textBox1.Text = properties.get("explorer_workspace");
 
             if(properties.check("datafolder")){
-                String locale = properties.get("datafolder").Split('(')[1].Split(')')[0];
-                regionbox.Text = locale.Split('_')[0].ToUpper();
-                String language = "";
-                switch (locale.Split('_')[1])
-                {
-                    case "en":
-                        language = "English";
-                        break;
-                    case "fr":
-                        language = "French";
-                        break;
-                    case "gr":
-                        language = "German";
-                        break;
-                    case "it":
-                        language = "Italian";
-                        break;
-                    case "ne":
-                        language = "Nederlands";
-                        break;
-                    case "po":
-                        language = "Portugal";
-                        break;
-                    case "ru":
-                        language = "Russian";
-                        break;
-                    case "sp":
-                        language = "Spanish";
-                        break;
-                    default:
-                        language = "";
-                        break;
 
+                String locale = properties.get("datafolder");
+                String language = "";
+                if (locale != "data")
+                {
+                    locale = locale.Split('(')[1].Split(')')[0];
+                    regionbox.Text = locale.Split('_')[0].ToUpper();
+                    
+                    switch (locale.Split('_')[1])
+                    {
+                        case "en":
+                            language = "English";
+                            break;
+                        case "fr":
+                            language = "French";
+                            break;
+                        case "gr":
+                            language = "German";
+                            break;
+                        case "it":
+                            language = "Italian";
+                            break;
+                        case "ne":
+                            language = "Nederlands";
+                            break;
+                        case "po":
+                            language = "Portugal";
+                            break;
+                        case "ru":
+                            language = "Russian";
+                            break;
+                        case "sp":
+                            language = "Spanish";
+                            break;
+                        default:
+                            language = "";
+                            break;
+
+                    }
+
+                }else
+                {
+                    language = "English";
                 }
+                
+                
                 localisationbox.Text = language;
+                
             }
             
 
@@ -107,6 +122,8 @@ namespace MeteorSkinLibrary
             checkBox6.Checked = Library.get_moved_dlc_status("Corrin");
             checkBox7.Checked = Library.get_moved_dlc_status("Bayonetta");
 
+            message.Text = "";
+            message.ForeColor = Color.Green;
 
         }
 
@@ -167,6 +184,7 @@ namespace MeteorSkinLibrary
                     datafolder = "data(" + region + "_sp)";
                     break;
             }
+            message.Text = "Data folder set to : " + datafolder;
             properties.add("datafolder",datafolder);
         }
 
@@ -180,12 +198,17 @@ namespace MeteorSkinLibrary
             String fullname = ((CheckBox)sender).Text;
             if (((CheckBox)sender).Checked)
             {
+                Default_Library.set_moved_dlc_status(fullname, "1");
                 Library.set_moved_dlc_status(fullname, "1");
+                message.Text = fullname + " set to moved";
             }else
             {
+                Default_Library.set_moved_dlc_status(fullname, "0");
                 Library.set_moved_dlc_status(fullname, "0");
+                message.Text = fullname + " set to original position";
             }
         }
+
     }
 
 

@@ -43,6 +43,7 @@
             this.resetAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smashExplorerInterfaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importSmashExplorerWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportSmashExplorerWorkpaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CharacterList = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -86,7 +87,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.slotbox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.exportSmashExplorerWorkpaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -214,6 +214,13 @@
             this.importSmashExplorerWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.importSmashExplorerWorkspaceToolStripMenuItem.Text = "Import SmashExplorer workspace";
             this.importSmashExplorerWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.launch_se_import);
+            // 
+            // exportSmashExplorerWorkpaceToolStripMenuItem
+            // 
+            this.exportSmashExplorerWorkpaceToolStripMenuItem.Name = "exportSmashExplorerWorkpaceToolStripMenuItem";
+            this.exportSmashExplorerWorkpaceToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.exportSmashExplorerWorkpaceToolStripMenuItem.Text = "Export SmashExplorer workpace";
+            this.exportSmashExplorerWorkpaceToolStripMenuItem.Click += new System.EventHandler(this.launch_se_export);
             // 
             // CharacterList
             // 
@@ -417,7 +424,7 @@
             this.models_ListView.Location = new System.Drawing.Point(9, 19);
             this.models_ListView.MultiSelect = false;
             this.models_ListView.Name = "models_ListView";
-            this.models_ListView.Size = new System.Drawing.Size(418, 134);
+            this.models_ListView.Size = new System.Drawing.Size(420, 130);
             this.models_ListView.TabIndex = 15;
             this.models_ListView.UseCompatibleStateImageBehavior = false;
             this.models_ListView.SelectedIndexChanged += new System.EventHandler(this.model_selected);
@@ -651,13 +658,6 @@
             this.label6.TabIndex = 15;
             this.label6.Text = "Meteor Skin Drop Zone";
             // 
-            // exportSmashExplorerWorkpaceToolStripMenuItem
-            // 
-            this.exportSmashExplorerWorkpaceToolStripMenuItem.Name = "exportSmashExplorerWorkpaceToolStripMenuItem";
-            this.exportSmashExplorerWorkpaceToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
-            this.exportSmashExplorerWorkpaceToolStripMenuItem.Text = "Export SmashExplorer workpace";
-            this.exportSmashExplorerWorkpaceToolStripMenuItem.Click += new System.EventHandler(this.launch_se_export);
-            // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -677,7 +677,7 @@
             this.MaximumSize = new System.Drawing.Size(1215, 660);
             this.MinimumSize = new System.Drawing.Size(1215, 660);
             this.Name = "main";
-            this.Text = "Mowjoh\'s Meteor Skin Library Alpha R4";
+            this.Text = "Mowjoh\'s Meteor Skin Library Alpha R5 with ui_char_db !";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
