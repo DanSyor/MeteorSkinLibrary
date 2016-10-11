@@ -248,17 +248,20 @@ namespace MeteorSkinLibrary
                     if (!Directory.Exists(edited_csppath + csp_name))
                     {
                         Directory.CreateDirectory(edited_csppath + csp_name);
-                        File.Copy(csp_path, edited_csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
+                        
                     }
-                    
-                }else
+                    File.Copy(csp_path, edited_csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
+
+                }
+                else
                 {
                     if (!Directory.Exists(csppath + csp_name))
                     {
                         Directory.CreateDirectory(csppath + csp_name);
-                        File.Copy(csp_path, csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
+                        
                     }
-                    
+                    File.Copy(csp_path, csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
+
                 }
                 
             }else
@@ -266,8 +269,9 @@ namespace MeteorSkinLibrary
                 if (!Directory.Exists(csppath + csp_name))
                 {
                     Directory.CreateDirectory(csppath + csp_name);
-                    File.Copy(csp_path, csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
+                    
                 }
+                File.Copy(csp_path, csppath + csp_name + "/" + csp_name + "_" + cspfolder + "_" + slotstring + ".nut", true);
             }
         }
 

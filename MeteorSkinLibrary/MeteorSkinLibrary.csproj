@@ -76,6 +76,7 @@
     <Compile Include="config.Designer.cs">
       <DependentUpon>config.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileManager.cs" />
     <Compile Include="MetaHandler.cs" />
     <Compile Include="PropertyHandler.cs" />
     <Compile Include="main.cs">
@@ -104,6 +105,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -131,10 +133,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
-    <Content Include="icon2.ico" />
     <Content Include="iconic.ico" />
     <Content Include="iconnew.ico" />
+    <None Include="Resources\ajax-loader %281%29.gif" />
+    <None Include="Resources\ajax-loader.gif" />
+    <None Include="Resources\01.png" />
+    <None Include="Resources\téléchargement.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

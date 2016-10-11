@@ -110,10 +110,7 @@ namespace MeteorSkinLibrary
                 
                 
                 localisationbox.Text = language;
-                
             }
-            
-
             checkBox1.Checked = Library.get_moved_dlc_status("Mewtwo");
             checkBox2.Checked = Library.get_moved_dlc_status("Lucas");
             checkBox3.Checked = Library.get_moved_dlc_status("Roy");
@@ -124,6 +121,8 @@ namespace MeteorSkinLibrary
 
             message.Text = "";
             message.ForeColor = Color.Green;
+
+            checkBox8.Checked = properties.get("unlocalised") == "1" ? true : false;
 
         }
 
@@ -209,6 +208,10 @@ namespace MeteorSkinLibrary
             }
         }
 
+        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
 

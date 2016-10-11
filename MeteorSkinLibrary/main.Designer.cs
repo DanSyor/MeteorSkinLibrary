@@ -84,9 +84,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textConsole = new System.Windows.Forms.RichTextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.slotbox = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.loadingbox = new System.Windows.Forms.PictureBox();
+            this.appstatus = new System.Windows.Forms.Label();
+            this.meteorbox = new System.Windows.Forms.PictureBox();
+            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -97,7 +100,9 @@
             this.groupBox3.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loadingbox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.meteorbox)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -267,7 +272,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(446, 538);
+            this.groupBox1.Size = new System.Drawing.Size(446, 383);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Skin Information";
@@ -611,9 +616,9 @@
             // 
             // textConsole
             // 
-            this.textConsole.Location = new System.Drawing.Point(868, 49);
+            this.textConsole.Location = new System.Drawing.Point(871, 53);
             this.textConsole.Name = "textConsole";
-            this.textConsole.Size = new System.Drawing.Size(319, 554);
+            this.textConsole.Size = new System.Drawing.Size(319, 399);
             this.textConsole.TabIndex = 4;
             this.textConsole.Text = "";
             // 
@@ -626,44 +631,67 @@
             this.label9.TabIndex = 7;
             this.label9.Text = "Console";
             // 
-            // panel1
+            // backgroundWorker1
             // 
-            this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.slotbox);
-            this.panel1.Controls.Add(this.label6);
-            this.panel1.Location = new System.Drawing.Point(400, 450);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(458, 153);
-            this.panel1.TabIndex = 16;
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // slotbox
+            // groupBox6
             // 
-            this.slotbox.AllowDrop = true;
-            this.slotbox.Location = new System.Drawing.Point(22, 107);
-            this.slotbox.Name = "slotbox";
-            this.slotbox.ReadOnly = true;
-            this.slotbox.Size = new System.Drawing.Size(418, 20);
-            this.slotbox.TabIndex = 16;
-            this.slotbox.Text = "Drop your meteor skin here, matey!";
-            this.slotbox.DragDrop += new System.Windows.Forms.DragEventHandler(this.slot_DragDrop);
-            this.slotbox.DragEnter += new System.Windows.Forms.DragEventHandler(this.slot_DragEnter);
+            this.groupBox6.Controls.Add(this.loadingbox);
+            this.groupBox6.Controls.Add(this.appstatus);
+            this.groupBox6.Location = new System.Drawing.Point(871, 473);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(316, 130);
+            this.groupBox6.TabIndex = 18;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "App Status";
             // 
-            // label6
+            // loadingbox
             // 
-            this.label6.AutoSize = true;
-            this.label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label6.Location = new System.Drawing.Point(166, 42);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(120, 15);
-            this.label6.TabIndex = 15;
-            this.label6.Text = "Meteor Skin Drop Zone";
+            this.loadingbox.Image = global::MeteorSkinLibrary.Properties.Resources.ajax_loader__1_;
+            this.loadingbox.Location = new System.Drawing.Point(6, 82);
+            this.loadingbox.Name = "loadingbox";
+            this.loadingbox.Size = new System.Drawing.Size(304, 20);
+            this.loadingbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.loadingbox.TabIndex = 1;
+            this.loadingbox.TabStop = false;
+            // 
+            // appstatus
+            // 
+            this.appstatus.AutoSize = true;
+            this.appstatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.appstatus.Location = new System.Drawing.Point(6, 38);
+            this.appstatus.Name = "appstatus";
+            this.appstatus.Size = new System.Drawing.Size(72, 20);
+            this.appstatus.TabIndex = 0;
+            this.appstatus.Text = "STATUS";
+            this.appstatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // meteorbox
+            // 
+            this.meteorbox.Image = global::MeteorSkinLibrary.Properties.Resources._01;
+            this.meteorbox.Location = new System.Drawing.Point(423, 473);
+            this.meteorbox.Name = "meteorbox";
+            this.meteorbox.Size = new System.Drawing.Size(420, 130);
+            this.meteorbox.TabIndex = 17;
+            this.meteorbox.TabStop = false;
+            this.meteorbox.DragDrop += new System.Windows.Forms.DragEventHandler(this.slot_DragDrop);
+            this.meteorbox.DragEnter += new System.Windows.Forms.DragEventHandler(this.slot_DragEnter);
+            // 
+            // backgroundWorker2
+            // 
+            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
             // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1199, 621);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.groupBox6);
+            this.Controls.Add(this.meteorbox);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textConsole);
             this.Controls.Add(this.label4);
@@ -677,7 +705,7 @@
             this.MaximumSize = new System.Drawing.Size(1215, 660);
             this.MinimumSize = new System.Drawing.Size(1215, 660);
             this.Name = "main";
-            this.Text = "Mowjoh\'s Meteor Skin Library Alpha R5 with ui_char_db !";
+            this.Text = "Mowjoh\'s Meteor Skin Library Alpha R5.3.2";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -693,8 +721,10 @@
             this.tabPage3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loadingbox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.meteorbox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -740,9 +770,6 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ListView models_ListView;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox slotbox;
         private System.Windows.Forms.ToolStripMenuItem resetConfigToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.GroupBox groupBox4;
@@ -760,6 +787,12 @@
         private System.Windows.Forms.ToolStripMenuItem resetAllToolStripMenuItem;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.ToolStripMenuItem exportSmashExplorerWorkpaceToolStripMenuItem;
+        private System.Windows.Forms.PictureBox meteorbox;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Label appstatus;
+        private System.Windows.Forms.PictureBox loadingbox;
+        private System.ComponentModel.BackgroundWorker backgroundWorker2;
     }
 }
 

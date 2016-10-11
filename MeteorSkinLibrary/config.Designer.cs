@@ -48,11 +48,15 @@
             this.label1 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.checkBox8 = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.checkBox8);
             this.groupBox1.Controls.Add(this.message);
             this.groupBox1.Controls.Add(this.checkBox7);
             this.groupBox1.Controls.Add(this.checkBox6);
@@ -87,7 +91,7 @@
             // checkBox7
             // 
             this.checkBox7.AutoSize = true;
-            this.checkBox7.Location = new System.Drawing.Point(303, 180);
+            this.checkBox7.Location = new System.Drawing.Point(10, 230);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(74, 17);
             this.checkBox7.TabIndex = 14;
@@ -98,7 +102,7 @@
             // checkBox6
             // 
             this.checkBox6.AutoSize = true;
-            this.checkBox6.Location = new System.Drawing.Point(214, 199);
+            this.checkBox6.Location = new System.Drawing.Point(151, 199);
             this.checkBox6.Name = "checkBox6";
             this.checkBox6.Size = new System.Drawing.Size(53, 17);
             this.checkBox6.TabIndex = 13;
@@ -109,7 +113,7 @@
             // checkBox5
             // 
             this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(214, 167);
+            this.checkBox5.Location = new System.Drawing.Point(151, 167);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(53, 17);
             this.checkBox5.TabIndex = 12;
@@ -120,7 +124,7 @@
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(121, 199);
+            this.checkBox4.Location = new System.Drawing.Point(82, 199);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(45, 17);
             this.checkBox4.TabIndex = 11;
@@ -131,7 +135,7 @@
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(121, 167);
+            this.checkBox3.Location = new System.Drawing.Point(82, 167);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(45, 17);
             this.checkBox3.TabIndex = 10;
@@ -241,6 +245,25 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // checkBox8
+            // 
+            this.checkBox8.AutoSize = true;
+            this.checkBox8.Location = new System.Drawing.Point(357, 167);
+            this.checkBox8.Name = "checkBox8";
+            this.checkBox8.Size = new System.Drawing.Size(81, 17);
+            this.checkBox8.TabIndex = 16;
+            this.checkBox8.Text = "Unlocalised";
+            this.checkBox8.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(313, 132);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(125, 13);
+            this.label5.TabIndex = 17;
+            this.label5.Text = "unlocalised ui_char_db ?";
+            // 
             // config
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -279,5 +302,7 @@
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Label message;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox checkBox8;
     }
 }
